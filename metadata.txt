@@ -1,5 +1,5 @@
 [general]
-name=PlanX Uygulama İmar Planı (Master Plan) Toolset
+name=PlanX Uygulama Ä°mar PlanÄ± (Master Plan) Toolset
 qgisMinimumVersion=3.0
 description=PlanX Spatial Planning Plugins - A toolset automating the Uygulama Imar Plani (UIP - Master Plan) implementation processes.
 version=1.0.0
@@ -11,7 +11,7 @@ repository=https://github.com/YusufEminoglu/PlanX-UIP
 category=Processing
 homepage=https://github.com/YusufEminoglu/PlanX-UIP
 hasProcessingProvider=yes
-icon=icon.png
+icon=icon_main.svg
 tags=planx,urban planning,master plan,uip,zoning,processing
 experimental=True
 deprecated=False
