@@ -1,0 +1,17 @@
+[general]
+name=PlanX Uygulama İmar Planı (Master Plan) Toolset
+qgisMinimumVersion=3.0
+description=PlanX Spatial Planning Plugins - A toolset automating the Uygulama Imar Plani (UIP - Master Plan) implementation processes.
+version=1.0.0
+author=Yusuf Eminoglu
+email=yusuf.eminoglu@deu.edu.tr
+about=Automated planning tools prepared with the vision of urban resilience, advanced spatial analysis, and optimization-based planning. Generates rapid UIP base layers and layouts.
+tracker=https://github.com/YusufEminoglu/PlanX-UIP/issues
+repository=https://github.com/YusufEminoglu/PlanX-UIP
+category=Processing
+homepage=https://github.com/YusufEminoglu/PlanX-UIP
+hasProcessingProvider=yes
+icon=icon.png
+tags=planx,urban planning,master plan,uip,zoning,processing
+experimental=True
+deprecated=False
