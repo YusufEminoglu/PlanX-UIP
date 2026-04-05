@@ -11,7 +11,6 @@ repository=https://github.com/YusufEminoglu/PlanX-UIP
 category=Processing
 homepage=https://github.com/YusufEminoglu/PlanX-UIP
 hasProcessingProvider=yes
-icon=icon.png
 tags=planx,urban planning,master plan,uip,zoning,processing
 experimental=True
 deprecated=False
