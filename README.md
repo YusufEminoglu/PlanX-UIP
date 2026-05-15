@@ -45,6 +45,6 @@ PlanX UIP Toolset automates the implementation processes of 1/1000-scale Master 
 ## Author
 
 **Yusuf Eminoglu** — Dokuz Eylül University, Department of City and Regional Planning  
-[GitHub](https://github.com/YusufEminoglu) | geospacephilo@gmail.com
+[GitHub](https://github.com/YusufEminoglu) | yusuf.eminoglu@deu.edu.tr
 
 Part of the **[PlanX](https://github.com/YusufEminoglu/PlanX)** urban planning plugin suite.
