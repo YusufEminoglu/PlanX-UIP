@@ -2,7 +2,7 @@
 name=PlanX Uygulama İmar Planı (Master Plan) Toolset
 qgisMinimumVersion=3.0
 description=PlanX Spatial Planning Plugins - A toolset automating the Uygulama İmar Planı (UIP - Master Plan) implementation processes.
-version=1.0.1
+version=1.0.2
 author=Yusuf Eminoglu
 email=yusuf.eminoglu@deu.edu.tr
 about=Automated planning tools prepared with the vision of urban resilience, advanced spatial analysis, and optimization-based planning. Generates rapid UIP base layers and layouts. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
@@ -16,4 +16,5 @@ experimental=False
 icon=icon.png
 deprecated=False
 changelog=
+    PlanX UIP Toolset 1.0.2 - Replaced the Plugin Hub and provider icon with a premium master-plan sheet mark aligned with the PlanX visual system.
     PlanX UIP Toolset 1.0.1 - Cleaned Unicode and Plugin Hub metadata, added DEU educational context, marked the plugin stable, and refreshed the release package.
