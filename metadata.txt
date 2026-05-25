@@ -1,8 +1,9 @@
 [general]
 name=PlanX Uygulama İmar Planı (Master Plan) Toolset
 qgisMinimumVersion=3.0
+qgisMaximumVersion=4.99
 description=PlanX Spatial Planning Plugins - A toolset automating the Uygulama İmar Planı (UIP - Master Plan) implementation processes.
-version=1.0.2
+version=1.2.1
 author=Yusuf Eminoglu
 email=yusuf.eminoglu@deu.edu.tr
 about=Automated planning tools prepared with the vision of urban resilience, advanced spatial analysis, and optimization-based planning. Generates rapid UIP base layers and layouts. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
@@ -16,5 +17,9 @@ experimental=False
 icon=icon.png
 deprecated=False
 changelog=
-    PlanX UIP Toolset 1.0.2 - Replaced the Plugin Hub and provider icon with a premium master-plan sheet mark aligned with the PlanX visual system.
-    PlanX UIP Toolset 1.0.1 - Cleaned Unicode and Plugin Hub metadata, added DEU educational context, marked the plugin stable, and refreshed the release package.
+    1.2.1 - Security hardening for Plugin Hub: added HTTPS scheme whitelist before urllib.request.urlopen in the asset downloader (rejects file://, ftp:// and custom schemes) and an in-line Bandit B310 suppression with rationale; only the asset downloader was touched, no functional changes.
+    1.2.0 - DOP tool major refactor: embedded 241-entry uip_fonksiyon master list (data/dop_values.gpkg + Python constants); new HARIC category for areas excluded from both numerator and denominator (protected sites, coastal/Bosphorus buffers, planning boundaries, military zones); new formula DOP = (KAMU + ROAD) / (PO - HARIC) where OZEL areas are now part of the effective area but not the DOP numerator; three master-list multi-select Enum parameters (HARIC / OZEL / KAMU) with smart group-based defaults and free-text extras; user-selectable fallback category (KAMU / OZEL / HARIC) for unmapped function values with warning banner in the HTML report.
+    1.1.1 - DOP tool category overhaul: three multi-select Enum lists (private / public / open-green) with multiline extras; warning system for uncategorised islands; CDN / INLINE HTML report mode parameter; kategori, dop_dahil and acik_yesil fields added to vector outputs; per-etap private / public / other island and area breakdowns. Previous releases auto-classified every non-private island as public which caused biased ratios; now only ticked items count as public.
+    1.1.0 - DOP (Duzenleme Ortaklik Payi / Public Domain Contribution) elite revamp: dynamic function-column selector and user-defined exclusion list; five spatial vector outputs (DOP core, DOP excluded, road and public, etap zones, summary tables); optional etap layer or automatic 1-20 area-weighted k-means with island-snap etap generation; effective-area-based DOP formula (target 45 percent); 9th article 75 percent open-green check; automatic recommendation for excess DOP (reclassify up to 25 percent as private use); offline Plotly and Leaflet HTML dashboard with 11 charts, interactive map and six tabs.
+    1.0.2 - Replaced the Plugin Hub and provider icon with a premium master-plan sheet mark aligned with the PlanX visual system.
+    1.0.1 - Cleaned Unicode and Plugin Hub metadata, added DEU educational context, marked the plugin stable, and refreshed the release package.
