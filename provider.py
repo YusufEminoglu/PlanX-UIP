@@ -115,6 +115,19 @@ class PlanXUIPProvider(QgsProcessingProvider):
         if alg8 and hasattr(alg8, 'DuzenlemeOrtaklikPayiUIP'):
             class Alg8(alg8.DuzenlemeOrtaklikPayiUIP):
                 def icon(self): return QIcon(os.path.join(plugin_dir, 'icon_8.svg'))
+                def processAlgorithm(self, parameters, context, feedback):
+                    results = super().processAlgorithm(parameters, context, feedback)
+                    # HTML raporu sistem tarayicisinda otomatik ac
+                    try:
+                        html_path = results.get(self.OUT_HTML)
+                        if html_path and os.path.exists(html_path):
+                            from qgis.PyQt.QtCore import QUrl
+                            from qgis.PyQt.QtGui import QDesktopServices
+                            QDesktopServices.openUrl(QUrl.fromLocalFile(html_path))
+                            feedback.pushInfo("HTML dashboard sistem tarayicisinda acildi.")
+                    except Exception as e:
+                        feedback.pushInfo("UYARI: HTML rapor otomatik acilamadi: %s" % e)
+                    return results
             self.addAlgorithm(Alg8())
 
     def id(self):
