@@ -3,7 +3,7 @@ name=PlanX Uygulama İmar Planı (Master Plan) Toolset
 qgisMinimumVersion=3.0
 qgisMaximumVersion=4.99
 description=PlanX Spatial Planning Plugins - A toolset automating the Uygulama İmar Planı (UIP - Master Plan) implementation processes.
-version=1.2.4
+version=1.2.5
 author=Yusuf Eminoglu
 email=yusuf.eminoglu@deu.edu.tr
 about=Automated planning tools prepared with the vision of urban resilience, advanced spatial analysis, and optimization-based planning. Generates rapid UIP base layers and layouts. Developed with feedback from educational workflows at Dokuz Eylul University, Department of City and Regional Planning.
@@ -14,7 +14,7 @@ homepage=https://github.com/YusufEminoglu/PlanX-UIP
 hasProcessingProvider=yes
 tags=planx,urban planning,master plan,uip,zoning,processing
 experimental=False
-icon=icon.png
+icon=icon.svg
 deprecated=False
 changelog=
     1.2.1 - Security hardening for Plugin Hub: added HTTPS scheme whitelist before urllib.request.urlopen in the asset downloader (rejects file://, ftp:// and custom schemes) and an in-line Bandit B310 suppression with rationale; only the asset downloader was touched, no functional changes.

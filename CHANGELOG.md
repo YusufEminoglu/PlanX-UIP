@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.5] - 2026-05-30
+
+- Revised plugin icon to SVG
+
 ## [1.2.4] - 2026-05-26
 
 - Maintenance release: compatibility validation for QGIS 3.40+/4 and packaging refresh.
