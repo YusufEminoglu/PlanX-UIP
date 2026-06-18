@@ -7,7 +7,7 @@ authors:
     orcid: "https://orcid.org/0009-0005-6000-2934"
 title: "PlanX Uygulama Imar Plani (Master Plan) Toolset"
 version: "1.2.5"
-# doi: "" # Zenodo DOI numarasi alindiktan sonra buraya eklenebilir
+doi: "10.5281/zenodo.20753144"
 date-released: "2026-06-18"
 url: "https://github.com/YusufEminoglu/PlanX-UIP"
 abstract: "PlanX Spatial Planning Plugins - A toolset automating the Uygulama Imar Plani (UIP - Master Plan) implementation processes."
