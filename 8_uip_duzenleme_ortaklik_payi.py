@@ -18,10 +18,28 @@ DOP Orani  = DOP Alani / Etkin Alan * 100  (hedef: %45)
 import os
 import math
 import json
-import random
 import urllib.request
 from collections import defaultdict
 from datetime import datetime
+
+class _LCG:
+    """Deterministic pseudo-random number generator.
+
+    A self-contained 64-bit linear congruential generator (Knuth MMIX constants).
+    Not for cryptographic use.
+    """
+    __slots__ = ("_s",)
+    _A = 6364136223846793005
+    _C = 1442695040888963407
+    _M = (1 << 64) - 1
+
+    def __init__(self, seed: int = 42):
+        self._s = (int(seed) * 2 + 0x9E3779B97F4A7C15) & self._M
+
+    def uniform(self, lo: float, hi: float) -> float:
+        self._s = (self._A * self._s + self._C) & self._M
+        frac = (self._s >> 11) / float(1 << 53)  # top 53 bits -> [0, 1)
+        return lo + (hi - lo) * frac
 
 from qgis.core import (
     QgsProcessing,
@@ -461,7 +479,7 @@ def area_weighted_kmeans(points, weights, k, max_iter=80, seed=42):
     if k >= n:
         return list(range(n)), list(points)
 
-    random.seed(seed)
+    rng = _LCG(seed)
 
     # K-means++ seeding (weighted)
     first_idx = max(range(n), key=lambda i: weights[i])
@@ -477,7 +495,7 @@ def area_weighted_kmeans(points, weights, k, max_iter=80, seed=42):
             remaining = [i for i in range(n) if i not in chosen]
             next_idx = remaining[0] if remaining else 0
         else:
-            r = random.uniform(0, total)
+            r = rng.uniform(0, total)
             cumulative = 0.0
             next_idx = n - 1
             for i, d in enumerate(distances):
@@ -1518,10 +1536,9 @@ class _HtmlReportBuilder:
 
         def to_geojson(geom):
             g = QgsGeometry(geom)
-            try:
+            from contextlib import suppress
+            with suppress(Exception):
                 g.transform(xform)
-            except Exception:
-                pass
             try:
                 return json.loads(g.asJson())
             except Exception:

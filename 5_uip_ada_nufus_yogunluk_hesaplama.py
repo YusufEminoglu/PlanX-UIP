@@ -49,7 +49,9 @@ class YapiYogunluguVeNufusHesaplaUIP(QgsProcessingAlgorithm):
             QgsField("Tahmini_Nufus", QVariant.Double),
             QgsField("Kisi_Basina_TIA", QVariant.Double),
             QgsField("Nufus_Yogunlugu_m2", QVariant.Double),
+            QgsField("Nufus_Yogunlugu_ha", QVariant.Double),
             QgsField("Yogunluk_Sinifi", QVariant.String),
+            QgsField("Imar_Yogunluk_Sinifi", QVariant.String),
             QgsField("Z_Skoru", QVariant.Double)
         ]
         
@@ -109,13 +111,16 @@ class YapiYogunluguVeNufusHesaplaUIP(QgsProcessingAlgorithm):
                 kisi_basina_tia_list.append(kisi_basina_tia)
                 nufus_yogunlugu_list.append(nufus_yogunlugu_m2)
 
+            nufus_yogunlugu_hektar = round(tahmini_nufus / (area / 10000.0), 2) if area > 0 else 0.0
+
             processed_data.append({
                 'feat': feat,
                 'kullanilan_emsal': kullanilan_emsal,
                 'tia': tia,
                 'tahmini_nufus': tahmini_nufus,
                 'kisi_basina_tia': kisi_basina_tia,
-                'nufus_yogunlugu_m2': nufus_yogunlugu_m2
+                'nufus_yogunlugu_m2': nufus_yogunlugu_m2,
+                'nufus_yogunlugu_hektar': nufus_yogunlugu_hektar
             })
 
         lower_bound, upper_bound = 0, 0
@@ -148,12 +153,19 @@ class YapiYogunluguVeNufusHesaplaUIP(QgsProcessingAlgorithm):
             nufus_yogunlugu_m2 = data['nufus_yogunlugu_m2']
 
             yogunluk_sinifi = "Nüfus Yok"
+            imar_yogunluk_sinifi = "Nüfus Yok"
             z_score = 0.0
 
             if data['tahmini_nufus'] > 0:
                 if kisi_basina_tia < lower_bound: yogunluk_sinifi = "Kritik Düşük (Sıkışık)"
                 elif kisi_basina_tia > upper_bound: yogunluk_sinifi = "Kritik Yüksek (Seyrek)"
                 else: yogunluk_sinifi = "Normal Dağılım"
+
+                density_ha = data['nufus_yogunlugu_hektar']
+                if density_ha < 150: imar_yogunluk_sinifi = "Düşük Yoğunluk (<150 kişi/ha)"
+                elif density_ha <= 350: imar_yogunluk_sinifi = "Orta Yoğunluk (150-350 kişi/ha)"
+                elif density_ha <= 500: imar_yogunluk_sinifi = "Yüksek Yoğunluk (350-500 kişi/ha)"
+                else: imar_yogunluk_sinifi = "Çok Yüksek Yoğunluk (>500 kişi/ha)"
 
                 if std_dev_density > 0:
                     z_score = round((nufus_yogunlugu_m2 - mean_density) / std_dev_density, 3)
@@ -163,7 +175,9 @@ class YapiYogunluguVeNufusHesaplaUIP(QgsProcessingAlgorithm):
             out_feat.setAttribute("Tahmini_Nufus", data['tahmini_nufus'])
             out_feat.setAttribute("Kisi_Basina_TIA", kisi_basina_tia)
             out_feat.setAttribute("Nufus_Yogunlugu_m2", nufus_yogunlugu_m2)
+            out_feat.setAttribute("Nufus_Yogunlugu_ha", data['nufus_yogunlugu_hektar'])
             out_feat.setAttribute("Yogunluk_Sinifi", yogunluk_sinifi)
+            out_feat.setAttribute("Imar_Yogunluk_Sinifi", imar_yogunluk_sinifi)
             out_feat.setAttribute("Z_Skoru", z_score)
 
             sink.addFeature(out_feat, QgsFeatureSink.FastInsert)

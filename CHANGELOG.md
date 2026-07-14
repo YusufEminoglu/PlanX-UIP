@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.7] - 2026-07-14
+
+- Calculate density in hectares, add imar density classes, and clean all security scan warnings without config overrides
+
 ## [1.2.6] - 2026-06-18
 
 - docs: add CITATION.cff for Zenodo DOI integration
