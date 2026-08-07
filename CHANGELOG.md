@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.9] - 2026-08-07
+
+- Add floating Save as PDF button to reference manual
+
 ## [1.2.8] - 2026-08-07
 
 - Add comprehensive academic reference manual: 8 algorithms, 42 equations
