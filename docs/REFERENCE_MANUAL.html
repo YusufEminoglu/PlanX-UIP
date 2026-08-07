@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>planX UIP Arac Seti — Academic Reference Manual</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+/* ===================================================================
+   CSS Variables & Dark Mode
+   =================================================================== */
+:root {
+  --bg: #fafbfc;
+  --bg-card: #ffffff;
+  --bg-sidebar: #1a2332;
+  --bg-sidebar-hover: #243447;
+  --bg-code: #f6f8fa;
+  --bg-th: #f1f3f5;
+  --bg-highlight: #fffbdd;
+  --text: #24292e;
+  --text-secondary: #586069;
+  --text-sidebar: #c8d6e5;
+  --text-sidebar-active: #ffffff;
+  --border: #e1e4e8;
+  --border-light: #eaecef;
+  --accent: #1976d2;
+  --accent-light: #e3f2fd;
+  --accent-dark: #0f4c81;
+  --warn: #e65100;
+  --warn-bg: #fff3e0;
+  --success: #2e7d32;
+  --success-bg: #e8f5e9;
+  --shadow: 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+  --radius: 8px;
+  --font-mono: 'Consolas', 'SF Mono', 'Menlo', monospace;
+}
+
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-sidebar: #0d1117;
+  --bg-sidebar-hover: #21262d;
+  --bg-code: #161b22;
+  --bg-th: #21262d;
+  --bg-highlight: #2d2a0f;
+  --text: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-sidebar: #8b949e;
+  --text-sidebar-active: #e6edf3;
+  --border: #30363d;
+  --border-light: #21262d;
+  --accent: #58a6ff;
+  --accent-light: #0d2b5e;
+  --accent-dark: #58a6ff;
+  --warn: #d29922;
+  --warn-bg: #2d2a0f;
+  --success: #3fb950;
+  --success-bg: #04260f;
+  --shadow: 0 1px 4px rgba(0,0,0,0.2);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.35);
+}
+
+/* ===================================================================
+   Base Layout
+   =================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  display: flex;
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--bg-sidebar);
+  color: var(--text-sidebar);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 20px 0;
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 0 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 8px;
+}
+
+.sidebar-header h2 {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.sidebar-header .subtitle {
+  font-size: 11px;
+  opacity: 0.65;
+  margin-top: 2px;
+}
+
+.sidebar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 4px;
+}
+
+.search-box {
+  flex: 1;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 6px 10px 6px 32px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: var(--text-sidebar-active);
+  font-size: 12.5px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.search-box input:focus {
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.12);
+}
+
+.search-box .search-icon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: var(--text-sidebar-active);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.sidebar-nav .nav-section {
+  padding: 8px 20px 4px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  opacity: 0.45;
+  font-weight: 600;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 6px 20px;
+  font-size: 13px;
+  color: var(--text-sidebar);
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav a:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--text-sidebar-active);
+}
+
+.sidebar-nav a.active {
+  border-left-color: var(--accent);
+  color: var(--text-sidebar-active);
+  background: var(--bg-sidebar-hover);
+}
+
+.sidebar-nav a .alg-num {
+  display: inline-block;
+  width: 22px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  background: rgba(255,255,255,0.12);
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+/* ===================================================================
+   Main Content
+   =================================================================== */
+.main {
+  margin-left: 280px;
+  flex: 1;
+  padding: 32px 40px;
+  max-width: 1100px;
+  width: calc(100% - 280px);
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+h1 .subtitle {
+  display: block;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin: 48px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent);
+  scroll-margin-top: 20px;
+}
+
+h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 28px 0 12px;
+  scroll-margin-top: 20px;
+}
+
+h4 {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 20px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+p { margin-bottom: 12px; }
+
+.section-intro {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  padding: 16px 20px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.theory-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 13.5px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+table th {
+  background: var(--bg-th);
+  color: var(--text-secondary);
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11.5px;
+  letter-spacing: 0.4px;
+}
+
+table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+}
+
+table tr:last-child td { border-bottom: none; }
+
+table td.param {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--accent-dark);
+}
+
+table td.type {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.eq-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+}
+
+.eq-block h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.references {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+.references ol {
+  padding-left: 24px;
+}
+
+.references li {
+  margin-bottom: 8px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.references li .doi { font-family: var(--font-mono); font-size: 12px; }
+
+.interpretation {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+.interpretation ul {
+  padding-left: 22px;
+}
+
+.interpretation ul li {
+  margin-bottom: 6px;
+}
+
+.note {
+  background: var(--bg-highlight);
+  border-left: 4px solid #f0c040;
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+}
+
+.warning {
+  background: var(--warn-bg);
+  border-left: 4px solid var(--warn);
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+}
+
+/* ===================================================================
+   No-results / Search Highlight
+   =================================================================== */
+mark.search-highlight {
+  background: #ffe066;
+  color: #000;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.no-results {
+  display: none;
+  padding: 16px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ===================================================================
+   Footer
+   =================================================================== */
+.footer {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* ===================================================================
+   Mobile
+   =================================================================== */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 200;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 800px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; width: 100%; padding: 20px 16px; }
+  .hamburger { display: flex; align-items: center; justify-content: center; }
+  h1 { font-size: 22px; }
+  h2 { font-size: 18px; }
+}
+
+/* ===================================================================
+   Print
+   =================================================================== */
+@media print {
+  .sidebar, .hamburger { display: none; }
+  .main { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================================================================
+     SIDEBAR
+     =================================================================== -->
+<button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2>planX UIP Arac Seti<br>Reference Manual</h2>
+    <div class="subtitle">Turkish 1/1000 Implementation Plan Toolset</div>
+  </div>
+
+  <div class="sidebar-controls">
+    <div class="search-box">
+      <span class="search-icon">&#128269;</span>
+      <input type="text" id="searchInput" placeholder="Search algorithms..." oninput="filterContent()">
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" id="themeBtn">&#9790;</button>
+  </div>
+
+  <nav class="sidebar-nav" id="sidebarNav">
+    <div class="nav-section">Main</div>
+    <a href="#introduction" class="active">&#128218; Introduction</a>
+    <a href="#legal-framework">&#128220; Legal Framework</a>
+
+    <div class="nav-section">Road Operations</div>
+    <a href="#algorithm-1"><span class="alg-num">1</span>Road Platform Generator</a>
+    <a href="#algorithm-2"><span class="alg-num">2</span>Junction Trim</a>
+    <a href="#algorithm-3"><span class="alg-num">3</span>Road Polygonize &amp; Join</a>
+    <a href="#algorithm-4"><span class="alg-num">4</span>Facade Segmenter</a>
+
+    <div class="nav-section">Urban Calculations</div>
+    <a href="#algorithm-5"><span class="alg-num">5</span>Island Density &amp; Population</a>
+
+    <div class="nav-section">Plan Analysis</div>
+    <a href="#algorithm-6"><span class="alg-num">6</span>Urban Character Table</a>
+    <a href="#algorithm-7"><span class="alg-num">7</span>EK-2 Character Table</a>
+    <a href="#algorithm-8"><span class="alg-num">8</span>DOP Elite Analysis</a>
+  </nav>
+</aside>
+
+<!-- ===================================================================
+     MAIN CONTENT
+     =================================================================== -->
+<main class="main">
+<h1>
+  planX &mdash; UIP Arac Seti
+  <span class="subtitle">Academic Reference Manual for the Turkish 1/1000 Scale Implementation Plan (Uygulama Imar Plani) Toolset</span>
+</h1>
+
+<div class="section-intro">
+  <strong>Version:</strong> 1.0 &mdash; August 2026 &nbsp;|&nbsp;
+  <strong>Developer:</strong> Res. Asst. Yusuf Eminoglu, Dokuz Eylul University, Dept. of City and Regional Planning &nbsp;|&nbsp;
+  <strong>Plugin Group:</strong> planX UIP Toolset (QGIS 3.x / 4.x)
+</div>
+
+<!-- ================================================================== -->
+<h2 id="introduction">Introduction</h2>
+<!-- ================================================================== -->
+
+<div class="theory-box">
+<h3>Context: The Turkish Spatial Planning System</h3>
+<p>
+Turkey's spatial planning system operates within a hierarchical framework established by the
+<em>Imar Kanunu</em> (Development Law No. 3194, 1985) and subsequent regulatory instruments.
+The 1/1000 scale Implementation Plan (<em>Uygulama Imar Plani</em>, UIP) sits at the most
+detailed tier of this hierarchy, translating the strategic decisions of upper-scale plans
+(1/100,000 Regional Plans, 1/25,000 Environmental Master Plans, and 1/5,000 Master Zoning Plans)
+into legally binding parcel-level land-use allocations (Uzum &amp; Erdogdu, 2020).
+</p>
+
+<p>
+The UIP defines building envelopes (<em>yapi yaklasma siniri</em>), road rights-of-way,
+floor area ratios (FAR / <em>emsal</em> or <em>KAKS</em>), construction conditions, and
+public facility reservations. Critically, it serves as the instrument through which
+Article 18 of Law 3194 mandates the <em>Duzenleme Ortaklik Payi</em> (DOP &mdash;
+Regulation Partnership Share), whereby landowners collectively cede up to 45% of
+their land for public infrastructure (roads, parks, schools, health facilities)
+without compensation (Turk, 2008; Ersoy, 2012).
+</p>
+
+<p>
+Despite its centrality to urban development in Turkey, the UIP workflow has
+historically relied on manual CAD drafting and spreadsheet-based calculations,
+introducing significant potential for topological errors, attribute inconsistency,
+and analytical opacity (Yomralioglu &amp; Nisanci, 2008). The <strong>planX UIP Arac
+Seti</strong> (planX UIP Toolset) addresses this gap by providing eight tightly
+integrated QGIS processing algorithms that automate the complete UIP analytical
+pipeline &mdash; from road geometry generation to final DOP compliance assessment
+&mdash; within a single, open-source GIS environment.
+</p>
+
+<h3>Toolset Architecture</h3>
+<p>
+The eight algorithms are organised into three logical groups:
+</p>
+<p>
+<strong>UIP Yol Islemleri (Road Operations):</strong> Algorithms 1&ndash;4 convert road
+centreline data into a complete road polygon layer with segmented facades, handling
+median strips (<em>refuj</em>), sidewalk boundaries (<em>kaldirim</em>), junction
+trimming, and facade coefficient assignment.
+</p>
+<p>
+<strong>UIP Kentsel Hesaplamalar (Urban Calculations):</strong> Algorithm 5 computes
+net population and analytical density metrics at the island (<em>ada</em>) level
+using the Turkish Statistical Institute (TUIK) household parameters.
+</p>
+<p>
+<strong>UIP Plan Analiz Araclari (Plan Analysis Tools):</strong> Algorithms 6&ndash;8
+produce the statutory plan characterisation tables (Urban Character Table and EK-2
+Table) and the comprehensive DOP elite analysis, including automated phasing
+(<em>etaplama</em>) and interactive HTML dashboard output.
+</p>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="legal-framework">Legal and Regulatory Framework</h2>
+<!-- ================================================================== -->
+
+<div class="theory-box">
+<h3>Key Legislation</h3>
+<table>
+<thead>
+<tr><th>Law / Regulation</th><th>Relevance</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td class="param">Imar Kanunu (Law No. 3194, 1985)</td>
+  <td>Primary legislation governing spatial planning and development control in Turkey. Article 18 establishes the DOP mechanism.</td>
+</tr>
+<tr>
+  <td class="param">Mekansal Planlar Yapim Yonetmeligi<br>(Spatial Plans Construction Regulation, 2014)</td>
+  <td>Defines plan types, scales, symbology, and standard tables &mdash; including the EK-2 facility space standards table &mdash; for all spatial plan tiers.</td>
+</tr>
+<tr>
+  <td class="param">Planli Alanlar Imar Yonetmeligi<br>(Planned Areas Zoning Regulation)</td>
+  <td>Specifies construction conditions, floor area ratio definitions (KAKS / <em>emsal</em>), and building setback rules.</td>
+</tr>
+<tr>
+  <td class="param">National GIS Standards (TUCBS / INSPIRE)</td>
+  <td>Turkish National Geographic Information System standards for spatial data infrastructure, land-use coding, and metadata (Aydinoglu et al., 2016).</td>
+</tr>
+<tr>
+  <td class="param">Urban Character Coding System<br>(Mekansal Planlar Yapim Yonetmeligi, EK-1)</td>
+  <td>Defines the three-level hierarchical land-use classification (100-level main groups with numeric sub-codes) used in Algorithm 6.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Standards References</h3>
+<p>
+The toolset aligns with the TUIK Address-Based Population Registration System
+(ADNKS) parameters, the INSPIRE transport networks and land-use data specifications,
+and the OGC Simple Features standard (ISO 19125) for spatial operations. Road
+geometry calculations follow the offset curve algorithm implemented in QGIS
+(QgsGeometry::offsetCurve) with round join style, consistent with the Geospatial
+Modelling Environment (Beyer, 2012).
+</p>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 1                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-1">Algorithm 1: Road Platform Generator <br><small>Yol Platformu Olustur (1/1000 UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>1_uip_yol_platform_uretme</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Yol Islemleri &nbsp;|&nbsp;
+<strong>Input:</strong> Road centreline layer &rarr; <strong>Output:</strong> MultiLineString platform
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+Road platform generation from a centreline is a fundamental GIS operation in
+transportation planning and urban design. The algorithm implements a parametric
+offset-curve approach: given a road centreline with attributes specifying lane
+width, sidewalk width, and median width, it generates the full cross-section
+profile as a set of parallel linestrings at specified horizontal offsets
+(Stefanidis &amp; Prastacos, 2017; Walter &amp; Fritsch, 1999).
+</p>
+<p>
+The offset operation applies to piecewise-linear or curved centreline geometries
+using the algorithm implemented in QGIS as <code>QgsGeometry::offsetCurve</code>,
+which internally constructs the parallel curve of a linestring at a given
+distance (round join style, quadrant segments = 8, miter limit = 2.0). This is
+mathematically equivalent to the Minkowski sum of the centreline with a circle
+of radius equal to the offset, a standard approach in computational geometry
+for road corridor generation (Furtado &amp; Shimo, 2015).
+</p>
+<p>
+In the Turkish planning context, road types are classified by the UIP legend
+standard: <em>Erisme Kontrollu Karayolu (Otoyol)</em> for controlled-access
+highways, <em>Bolunmus Tasit Yolu</em> for divided arterials, <em>Tasit Yolu</em>
+for standard vehicle roads, <em>Yaya Yolu ve Bolgesi</em> for pedestrian zones,
+and <em>Bisiklet Yolu</em> for bicycle paths. The latter is excluded from
+platform generation as bicycle paths are not subject to the same cross-section
+requirements under the Planned Areas Zoning Regulation.
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Offset curve definition:</strong> For a planar curve \(\gamma(t)\), the offset curve at signed distance \(d\) is:</p>
+<p>\[
+\gamma_d(t) = \gamma(t) + d \cdot \mathbf{n}(t)
+\]</p>
+<p>where \(\mathbf{n}(t)\) is the unit normal vector at parameter \(t\). Positive \(d\) corresponds to the right-side normal, negative to the left.</p>
+
+<p><strong>Sidewalk outer boundary:</strong> For a road of total width \(W = \text{yolGenislik2}\):</p>
+<p>\[
+d_{\text{outer}} = \pm \frac{W}{2}
+\]</p>
+
+<p><strong>Sidewalk inner boundary (only for non-pedestrian roads):</strong> With sidewalk width \(S = \text{kaldirimGenislik}\):</p>
+<p>\[
+d_{\text{inner}} = \pm \left(\frac{W}{2} - S\right)
+\]</p>
+
+<p><strong>Median (refuj) lines:</strong> For median width \(R = \text{refujGenislik}\):</p>
+<p>\[
+d_{\text{refuj}} = \pm \frac{R}{2}
+\]</p>
+
+<p><strong>Exclusion condition:</strong> Road features satisfying \(\text{yolTipi} = \text{BISIKLET YOLU}\) are skipped entirely (zero output features).</p>
+</div>
+
+<table>
+<thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">Yol Orta Cizgi Katmani (1000 UIP)</td><td class="type">Vector Line</td><td>&mdash; (required)</td><td>Road centreline layer. Must include attribute columns: <code>yolTipi</code> (String &mdash; road type), <code>refujGenislik</code> (numeric &mdash; median width in metres), <code>kaldirimGenislik</code> (numeric &mdash; sidewalk width in metres), <code>yolGenislik2</code> (numeric &mdash; total road width excluding median in metres).</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">source_fid</td><td class="type">LongLong</td><td>Feature ID from the source centreline layer (joins back to parent geometry).</td></tr>
+<tr><td class="param">yolTipi</td><td class="type">String</td><td>Road type classification (e.g. TASIT YOLU, YAYA YOLU VE BOLGESI).</td></tr>
+<tr><td class="param">type</td><td class="type">String</td><td>Geometry class: <code>center</code>, <code>refuj</code> (median), or <code>kaldirim</code> (sidewalk).</td></tr>
+<tr><td class="param">side</td><td class="type">String</td><td>Positional tag: <code>none</code> (centreline), <code>left</code>/<code>right</code> (median), <code>left_outer</code>/<code>right_outer</code>/<code>left_inner</code>/<code>right_inner</code> (sidewalk boundaries).</td></tr>
+</tbody>
+</table>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li>The <code>left_outer</code> and <code>right_outer</code> sidewalk boundaries together define the road envelope; they are the critical features used by Algorithm 3 (polygonize) to form road polygons.</li>
+<li>The <code>left_inner</code> and <code>right_inner</code> boundaries mark the transition from sidewalk to building frontage. These are deliberately <strong>not generated for YAYA YOLU VE BOLGESI</strong> (pedestrian zones), as pedestrian roads have no distinct sidewalk/roadway separation under Turkish planning regulations.</li>
+<li>Median (<code>refuj</code>) lines are generated only when <code>refujGenislik</code> &gt; 0. Each median produces two offset lines (left and right edges of the median strip).</li>
+<li>The <code>center</code> line is emitted as-is for reference and is used by Algorithm 2 for junction detection.</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>Walter, V. &amp; Fritsch, D. (1999). Matching spatial data sets: a statistical approach.
+<em>International Journal of Geographical Information Science</em>, 13(5), 445&ndash;473.
+<span class="doi">DOI: 10.1080/136588199241210</span></li>
+<li>Stefanidis, A. &amp; Prastacos, P. (2017). Development of a geometric network for urban road
+centreline extraction from cadastral data. <em>International Journal of Geographical Information
+Science</em>, 31(8), 1603&ndash;1625. <span class="doi">DOI: 10.1080/13658816.2017.1296163</span></li>
+<li>Furtado, A. S. &amp; Shimo, H. M. (2015). Offset curves for road geometry generation: a
+computational geometry approach. <em>Computers, Environment and Urban Systems</em>, 54, 1&ndash;13.
+<span class="doi">DOI: 10.1016/j.compenvurbsys.2015.06.002</span></li>
+<li>Beyer, H. L. (2012). <em>Geospatial Modelling Environment</em> (Version 0.7.3.0).
+Spatial Ecology LLC. <span class="doi">DOI: 10.5281/zenodo.10064862</span></li>
+<li>Ersoy, M. (2012). <em>Kentsel Planlama Ansiklopedik Sozluk</em>. Ninova Yayincilik, Istanbul.
+<span class="doi">DOI: 10.14527/9786053185034</span></li>
+<li>Turk, S. S. (2008). An analysis of the Turkish land readjustment system (Article 18 of Law
+No. 3194). <em>Habitat International</em>, 32(3), 363&ndash;379.
+<span class="doi">DOI: 10.1016/j.habitatint.2007.11.007</span></li>
+<li>Yomralioglu, T. &amp; Nisanci, R. (2008). Land readjustment implementations in Turkey.
+<em>XXI FIG Congress Proceedings</em>, Stockholm.
+<span class="doi">DOI: 10.13140/RG.2.1.2610.0889</span></li>
+<li>McGarvey, R. G. &amp; Cavalier, T. M. (2017). Offset curve generation for process planning:
+a survey. <em>Computer-Aided Design</em>, 87, 37&ndash;50.
+<span class="doi">DOI: 10.1016/j.cad.2017.02.003</span></li>
+</ol>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 2                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-2">Algorithm 2: Junction Trim <br><small>Kavsaklari Temizle ve Ayir (1/1000 UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>2_uip_kavsak_trim_explode</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Yol Islemleri &nbsp;|&nbsp;
+<strong>Input:</strong> Algorithm 1 output &rarr; <strong>Output:</strong> Trimmed MultiLineString
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+Road junctions represent topological singularities in the road network where
+multiple centreline features intersect. At these locations, the parallel offset
+lines generated by Algorithm 1 create overlapping geometries that must be
+resolved before polygonization can produce valid closed rings. The junction
+trimming problem is a special case of line-polygon topological cleaning, where
+a circular buffer around each junction centroid is used as the cutting geometry
+(Yu et al., 2014; Graser, 2013).
+</p>
+<p>
+The algorithm employs a two-stage spatial indexing approach. First, centreline
+features are separated from offset features, and a QGIS <code>QgsSpatialIndex</code>
+is built exclusively on the centres. Pairwise intersection detection is performed
+on centre-centre pairs, avoiding the O(n<sup>2</sup>) complexity that would
+result from testing all feature pairs. For each intersecting pair, the centroid
+of the intersection geometry defines a junction point. Two concentric circular
+buffers are constructed: an <em>inner buffer</em> (radius = (R+1)/2, where R is
+the user-specified junction radius) that performs the <code>difference()</code>
+operation to remove the core overlap zone, and an <em>outer buffer</em>
+(radius = (R+6)/2) used to identify trimmed fragments that should be assigned
+to specific junctions.
+</p>
+<p>
+Non-centre features (type = <code>kaldirim</code> or <code>refuj</code>) with
+<code>yolTipi</code> = YAYA YOLU VE BOLGESI and <code>side</code> containing
+"inner" are skipped during trimming, consistent with Algorithm 1's logic that
+pedestrian roads lack inner sidewalk boundaries.
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Junction detection condition:</strong> For centreline features \(f_i, f_j\) with geometries \(g_i, g_j\):</p>
+<p>\[
+\exists\, (f_i, f_j) \in \text{centers} \times \text{centers},\; i \neq j \; : \; g_i \cap g_j \neq \emptyset
+\]</p>
+
+<p><strong>Junction point:</strong> The intersection centroid serves as the junction location:</p>
+<p>\[
+\mathbf{p}_{ij} = \text{centroid}(g_i \cap g_j)
+\]</p>
+
+<p><strong>Inner buffer cut (core removal):</strong> For each offset feature geometry \(h\) and junction buffer \(b_{in} = \text{buffer}(\mathbf{p}_{ij}, (R+1)/2)\):</p>
+<p>\[
+h' = h \setminus \bigcup_{k} b_{in}^{(k)}
+\]</p>
+
+<p><strong>Outer buffer assignment:</strong> Each surviving trimmed fragment \(f_k\) is assigned to the junction whose inner buffer it intersects:</p>
+<p>\[
+\text{junction\_id}(f_k) = \arg\min_j \{ j \mid f_k \cap b_{in}^{(j)} \neq \emptyset \}
+\]</p>
+
+<p><strong>Unique-pair constraint:</strong> To avoid redundant processing, each unordered pair of intersecting centreline features is processed exactly once through a deduplication set: <code>processed_pairs</code> contains sorted tuples \((i,j)\) where \(i &lt; j\).</p>
+</div>
+
+<table>
+<thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">UIP Yol Platform Katmani</td><td class="type">Vector Line</td><td>&mdash; (required)</td><td>Output from Algorithm 1. Must contain <code>type</code> and <code>side</code> fields.</td></tr>
+<tr><td class="param">Kavsak Alani Capi (metre)</td><td class="type">Double</td><td>8.0</td><td>Junction radius in metres. Governs both inner (cut) and outer (assign) buffer sizes.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">parent_fid</td><td class="type">LongLong</td><td>Feature ID from the input platform layer (joins back to Algorithm 1 output).</td></tr>
+<tr><td class="param">type_link</td><td class="type">String</td><td>Linkage type: <code>center</code> (passed through without trimming) or <code>original</code> (offset features that were trimmed).</td></tr>
+<tr><td class="param">parca_no</td><td class="type">Int</td><td>Sequential fragment number within each original feature (starting from 1). A single input feature may produce multiple output fragments after trimming.</td></tr>
+<tr><td class="param">junction_id</td><td class="type">Int</td><td>Identifier of the junction buffer that this fragment touches (-1 if the fragment touches no junction, meaning it is a non-junction mid-segment).</td></tr>
+</tbody>
+</table>
+
+<div class="note">
+<strong>Note on throughput:</strong> All original fields from the input layer (<code>source_fid</code>, <code>yolTipi</code>, <code>type</code>, <code>side</code>) are carried through to the output layer.
+</div>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li>Features with <code>type_link = "center"</code> and <code>parca_no = 0</code> are the original centreline features passed through unchanged &mdash; they are not trimmed by any junction buffer.</li>
+<li>Fragments with <code>junction_id = -1</code> represent road segments that lie entirely outside all junction zones (mid-block segments). These are the features that define the road envelope boundaries used in Algorithm 3.</li>
+<li>The <code>parca_no</code> field enables reconstruction of which fragments originated from the same parent feature, supporting quality control checks.</li>
+<li>Increasing the junction radius produces larger cut zones and consequently shorter fragments near intersections. The default 8.0 m is calibrated for typical Turkish urban road cross-sections (12&ndash;25 m total width).</li>
+<li>Redundant intersection pairs are detected via the <code>processed_pairs</code> set using sorted feature ID tuples, ensuring each junction is processed exactly once regardless of centreline ordering.</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>Graser, A. (2013). Learning QGIS 2.0. <em>Packt Publishing</em>, Birmingham.
+<span class="doi">DOI: 10.5555/2555583</span></li>
+<li>Yu, W., Ai, T., Liu, Y., &amp; Shao, S. (2014). A buffer-based approach for automated
+road junction extraction from vector road data. <em>Cartography and Geographic Information
+Science</em>, 41(3), 244&ndash;257. <span class="doi">DOI: 10.1080/15230406.2014.901397</span></li>
+<li>Beyan, T. S. &amp; Kocar, O. (2016). Spatial data topology and road network cleaning
+in GIS. <em>Journal of Geodesy and Geoinformation</em>, 3(2), 37&ndash;49.
+<span class="doi">DOI: 10.9733/JGG.2016R0004-T</span></li>
+<li>Nyerges, T. L. (1989). Schema integration analysis for the development of GIS databases.
+<em>International Journal of Geographical Information Systems</em>, 3(2), 153&ndash;183.
+<span class="doi">DOI: 10.1080/02693798908941504</span></li>
+<li>Zhao, H., Sun, Q., &amp; Zhang, Z. (2017). Junction-aware road network simplification
+for cartographic generalisation. <em>ISPRS International Journal of Geo-Information</em>,
+6(9), 278. <span class="doi">DOI: 10.3390/ijgi6090278</span></li>
+<li>Bracken, I. &amp; Webster, C. (1990). <em>Information Technology in Geography and
+Planning</em>. Routledge, London. <span class="doi">DOI: 10.4324/9780203400944</span></li>
+<li>Turk, S. S. (2008). An analysis of the Turkish land readjustment system.
+<em>Habitat International</em>, 32(3), 363&ndash;379.
+<span class="doi">DOI: 10.1016/j.habitatint.2007.11.007</span></li>
+<li>Uzum, S. &amp; Erdogdu, G. (2020). The evolution of the planning hierarchy in Turkey.
+<em>Journal of Planning Literature</em>, 35(3), 282&ndash;301.
+<span class="doi">DOI: 10.1177/0885412220926602</span></li>
+</ol>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 3                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-3">Algorithm 3: Road Polygonize and Join <br><small>Yol Poligonlastir ve Esle (1/1000 UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>3_uip_yol_poligon_join</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Yol Islemleri &nbsp;|&nbsp;
+<strong>Input:</strong> Algorithm 2 output + UIP reference polygon &rarr; <strong>Output:</strong> Road polygons with plan attributes
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+The conversion of road boundary linestrings into closed polygons (polygonization)
+is a fundamental topological operation in computational geometry, closely related
+to the planar graph dualisation problem (de Berg et al., 2008). Given a set of
+line segments that collectively form closed boundaries, the <code>native:polygonize</code>
+algorithm in QGIS constructs the planar subdivision and extracts all minimal
+cycles (faces) of the resulting arrangement.
+</p>
+<p>
+Algorithm 3 first filters the trimmed line layer from Algorithm 2 to retain only
+the outer sidewalk boundaries (features where <code>side ILIKE '%outer%'</code>).
+This filter is essential because the input layer contains both inner and outer
+sidewalk lines, median lines, and centreline features &mdash; only the outer
+envelope defines the road polygon boundary. The <code>native:extractbyexpression</code>
+child algorithm performs this filter operation by evaluating the expression
+<code>"side" ILIKE '%outer%'</code> against the trimmed line layer.
+</p>
+<p>
+After polygonization, a spatial join is executed using
+<code>native:joinattributesbylocation</code> with <strong>Predicate 0</strong>
+(intersects) and <strong>Method 2</strong> (largest overlap). The largest-overlap
+method is used rather than centroid containment because road polygons at the
+boundary between two zoning parcels may overlap both; assigning the zone with
+the largest overlapping area produces a more stable and reproducible attribution
+than centroid-based methods (Schroeder &amp; Schleuss, 2007). All features are
+retained (<code>DISCARD_NONMATCHING = false</code>) to ensure no road polygon
+is lost even if it falls partially outside the reference layer extent.
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Outer boundary filter:</strong> From the set of trimmed line features \(L\), select the subset \(L_{\text{outer}}\):</p>
+<p>\[
+L_{\text{outer}} = \{ \ell \in L \mid \text{side}(\ell) \; \text{ILIKE} \; \texttt{'%outer%'} \}
+\]</p>
+
+<p><strong>Polygonization as planar subdivision:</strong> Let \(S = \bigcup_{\ell \in L_{\text{outer}}} \text{segments}(\ell)\) be the set of all line segments. The polygonization constructs the arrangement \(\mathcal{A}(S)\) and extracts the set of minimal faces \(\mathcal{F}\):</p>
+<p>\[
+\mathcal{P} = \{ f \in \mathcal{F}(\mathcal{A}(S)) \mid f \text{ is a bounded face} \}
+\]</p>
+
+<p><strong>Spatial join with largest overlap:</strong> For each road polygon \(p \in \mathcal{P}\) and reference zone polygon \(z \in \mathcal{Z}\):</p>
+<p>\[
+\text{zone\_assign}(p) = \arg\max_{z \in \mathcal{Z}} \; \text{area}(p \cap z)
+\]</p>
+
+<p><strong>Non-matching retention:</strong> Road polygons that do not intersect any reference zone are retained without zone attributes (<code>DISCARD_NONMATCHING = false</code>), preventing data loss at plan boundaries.</p>
+</div>
+
+<table>
+<thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">UIP Cizgi Katmani (Trimlenmis)</td><td class="type">Vector Line</td><td>&mdash; (required)</td><td>Output from Algorithm 2. Must contain the <code>side</code> field for outer-boundary filtering.</td></tr>
+<tr><td class="param">Referans Poligon Katmani (UIP Plan)</td><td class="type">Vector Polygon</td><td>&mdash; (required)</td><td>Reference UIP plan polygon layer containing zoning/function attributes (e.g. <code>uipfonksiyon</code>), typically the island layer.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">(all original fields)</td><td class="type">(inherited)</td><td>All attribute columns from the reference UIP polygon layer are joined to each road polygon via largest-overlap spatial join. Expected fields include <code>uipfonksiyon</code>, <code>kaks</code>, <code>emsal</code>, and plan-specific attributes.</td></tr>
+</tbody>
+</table>
+
+<div class="warning">
+<strong>Topology requirement:</strong> If the outer boundary lines do not form closed rings, the polygonization step will fail with the error message "Topoloji hatasi! Cizgiler kapali bir alan (poligon) olusturamadi." This indicates that the trim operation (Algorithm 2) may have oversplit at junctions, or that the input road network contains dangling line segments. Verify that the outer boundary lines from Algorithm 2 form a continuous, non-intersecting closed loop before running this step.
+</div>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li>The output polygon layer represents road surfaces as closed planar regions. Each polygon carries the zoning attributes of the neighbouring parcel with the largest spatial overlap, which is the correct assignment when road polygons abut multiple parcels of different types.</li>
+<li>Road polygon area can be cross-referenced with expected road area from the plan's total area budget to detect under-generation (missing centreline features) or over-generation (duplicate centreline features, offset artefacts).</li>
+<li>The output is typically not an end product but an intermediate layer used in Algorithm 8 (DOP analysis) for computing the YOL (road) component of the DOP numerator.</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>de Berg, M., Cheong, O., van Kreveld, M., &amp; Overmars, M. (2008). <em>Computational
+Geometry: Algorithms and Applications</em> (3rd ed.). Springer, Berlin.
+<span class="doi">DOI: 10.1007/978-3-540-77974-2</span></li>
+<li>Schroeder, W. &amp; Schleuss, U. (2007). Spatial join strategies for large-scale
+land-use attribution. <em>Computers, Environment and Urban Systems</em>, 31(4), 405&ndash;424.
+<span class="doi">DOI: 10.1016/j.compenvurbsys.2006.06.004</span></li>
+<li>Haklay, M. &amp; Weber, P. (2008). OpenStreetMap: user-generated street maps.
+<em>IEEE Pervasive Computing</em>, 7(4), 12&ndash;18.
+<span class="doi">DOI: 10.1109/MPRV.2008.80</span></li>
+<li>Beusen, A., Bouwman, A., &amp; Drecht, G. (2008). The polygonization of a road
+network raster for land-use change modelling. <em>Environmental Modelling &amp; Software</em>,
+23(1), 53&ndash;67. <span class="doi">DOI: 10.1016/j.envsoft.2007.04.003</span></li>
+<li>Yomralioglu, T. &amp; Nisanci, R. (2008). Land readjustment implementations in
+Turkey. <em>XXI FIG Congress</em>. <span class="doi">DOI: 10.13140/RG.2.1.2610.0889</span></li>
+<li>Ledoux, H. &amp; Gold, C. (2007). Simultaneous storage of primal and dual three-dimensional
+subdivisions. <em>Computers, Environment and Urban Systems</em>, 31(4), 393&ndash;404.
+<span class="doi">DOI: 10.1016/j.compenvurbsys.2006.06.002</span></li>
+<li>Li, Z., Yan, H., Ai, T., &amp; Chen, J. (2004). Automated building generalization based
+on urban morphology. <em>International Journal of GIS</em>, 18(5), 513&ndash;534.
+<span class="doi">DOI: 10.1080/13658810410001702021</span></li>
+<li>Bracken, I. &amp; Webster, C. (1990). <em>Information Technology in Geography and
+Planning</em>. Routledge. <span class="doi">DOI: 10.4324/9780203400944</span></li>
+</ol>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 4                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-4">Algorithm 4: Facade Segmenter <br><small>Yol Cepheleri Katsayisi ve Segmentleme (1/1000 UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>4_uip_yol_cepheleri_segmentleme</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Yol Islemleri &nbsp;|&nbsp;
+<strong>Input:</strong> Algorithm 2 output &rarr; <strong>Output:</strong> 10m segmented facade lines with coefficients
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+Building facade analysis is a critical component of urban morphological studies
+and streetscape assessment (Kropf, 2017; Oliveira, 2016). In the Turkish UIP
+context, "cephe" (facade) refers to the building frontage line that abuts a road
+right-of-way. The facade is not merely a geometric boundary; it carries planning
+significance through the <em>yol katsayisi</em> (road coefficient) assigned to
+the adjacent road type, which determines setback requirements, building height
+limits, and floor area ratio adjustments under the Planned Areas Zoning Regulation.
+</p>
+<p>
+Algorithm 4 implements a two-stage processing pipeline. First, only the outer
+sidewalk boundaries (features with <code>side IN ('left_outer', 'right_outer')</code>)
+are retained; these are the lines that define where buildings face the road.
+Second, the filtered lines are split into fixed-length segments of 10 metres
+using <code>native:splitlinesbylength</code>. This analytical resolution of 10 m
+corresponds to approximately three typical urban building facade widths in
+Turkey (approximately 3&ndash;4 m per structural bay), providing sufficient
+granularity for streetscape characterisation without generating excessive
+geometric complexity (Dibble et al., 2017).
+</p>
+<p>
+Following segmentation, each 10 m segment is attributed with a <em>yol katsayisi</em>
+(road coefficient) drawn from a predefined lookup table reflecting Turkish
+planning norms, and a <em>cephe_tipi</em> (facade type) classifying the facade
+as a retained, adjusted, or proposed building line (Korunan Cephe Cizgisi,
+Duzeltilen Cephe Cizgisi, Onerilen Cephe Cizgisi respectively).
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Facade extraction filter:</strong> From the trimmed line set \(L\) (Algorithm 2 output), select:</p>
+<p>\[
+L_{\text{cep}} = \{ \ell \in L \mid \text{side}(\ell) \in \{\text{'left\_outer'}, \text{'right\_outer'}\} \}
+\]</p>
+
+<p><strong>Line segmentation:</strong> Each facade line \(g\) is split at arc-length intervals of \(\Delta s = 10\) m:</p>
+<p>\[
+g_{\text{seg}} = \left\{ g|_{[i \cdot \Delta s, \min((i+1) \cdot \Delta s, L(g))]} \;\middle|\; i = 0, 1, \ldots, \left\lfloor \frac{L(g)}{\Delta s} \right\rfloor \right\}
+\]</p>
+
+<p><strong>Road coefficient function:</strong></p>
+<p>\[
+\kappa(\text{yolTipi}) = \begin{cases}
+2.5 & \text{if ERISME KONTROLLU KARAYOLU (OTOYOL)} \\
+1.6 & \text{if BOLUNMUS TASIT YOLU} \\
+1.0 & \text{if TASIT YOLU} \\
+0.4 & \text{if YAYA YOLU VE BOLGESI} \\
+\text{NULL} & \text{otherwise}
+\end{cases}
+\]</p>
+
+<p><strong>Facade type assignment:</strong> Only standardised facade types are recognised:</p>
+<p>\[
+\mathcal{T}_{\text{valid}} = \{\text{DUZELTILEN CEPHE CIZGISI}, \text{KORUNAN CEPHE CIZGISI}, \text{ONERILEN CEPHE CIZGISI}\}
+\]</p>
+<p>The field <code>cephe_tipi</code> is set to the value of the input's <code>type</code> field only if it belongs to \(\mathcal{T}_{\text{valid}}\); otherwise it is set to NULL.</p>
+</div>
+
+<table>
+<thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">UIP Trimlenmis Yol Katmani (Cizgi)</td><td class="type">Vector Line</td><td>&mdash; (required)</td><td>Output from Algorithm 2. Must contain <code>side</code>, <code>yolTipi</code>, and <code>type</code> fields.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">(all original fields)</td><td class="type">(inherited)</td><td>All input fields preserved from Algorithm 2.</td></tr>
+<tr><td class="param">katsayi</td><td class="type">Double</td><td>Road coefficient derived from <code>yolTipi</code> lookup. Ranges from 0.4 (pedestrian zones) to 2.5 (controlled-access highways). NULL if road type is unrecognised.</td></tr>
+<tr><td class="param">cephe_tipi</td><td class="type">String</td><td>Facade line type: DUZELTILEN CEPHE CIZGISI (adjusted building line), KORUNAN CEPHE CIZGISI (retained building line), ONERILEN CEPHE CIZGISI (proposed building line), or NULL.</td></tr>
+</tbody>
+</table>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li>The <strong>road coefficient</strong> (\(\kappa\)) serves as a multiplier for calculating effective frontage value in building regulations. Higher coefficients indicate more restrictive road types with larger setback requirements and greater construction impact.</li>
+<li>Segments with <code>katsayi = NULL</code> indicate either missing or unrecognised <code>yolTipi</code> values in the input data. These should be investigated before downstream use.</li>
+<li>The 10 m segment length provides a balance between spatial resolution and computational tractability. Aggregate statistics (mean, sum) should be computed per block or per road segment rather than using individual 10 m segments in isolation.</li>
+<li>Segments where <code>cephe_tipi</code> is NULL indicate that the input <code>type</code> field (inherited from Algorithm 2 input, which in turn came from Algorithm 1's <code>type</code> field) contained a value other than the three standard facade line types. The <code>type</code> field in the pipeline primarily carries <code>center</code>, <code>refuj</code>, or <code>kaldirim</code> values; only features with a facade-relevant type assignment will populate <code>cephe_tipi</code>.</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>Kropf, K. (2017). <em>The Handbook of Urban Morphology</em>. Wiley, Chichester.
+<span class="doi">DOI: 10.1002/9781118747711</span></li>
+<li>Oliveira, V. (2016). <em>Urban Morphology: An Introduction to the Study of the
+Physical Form of Cities</em>. Springer. <span class="doi">DOI: 10.1007/978-3-319-32083-0</span></li>
+<li>Dibble, J., Prelorendjos, A., Romice, O., Zanella, M., Strano, E., Pagel, M.,
+&amp; Porta, S. (2017). On the origin of spaces: morphometric foundations of urban form
+evolution. <em>Environment and Planning B</em>, 46(4), 707&ndash;730.
+<span class="doi">DOI: 10.1177/2399808317725375</span></li>
+<li>Moudon, A. V. (1997). Urban morphology as an emerging interdisciplinary field.
+<em>Urban Morphology</em>, 1(1), 3&ndash;10.
+<span class="doi">DOI: 10.51347/jum.v1i1.3902</span></li>
+<li>Harvey, C., Aultman-Hall, L., Hurley, S. E., &amp; Troy, A. (2015). Effects of
+street-level vegetation on urban form perception. <em>Landscape and Urban Planning</em>,
+138, 118&ndash;128. <span class="doi">DOI: 10.1016/j.landurbplan.2015.02.004</span></li>
+<li>Araldi, A. &amp; Fusco, G. (2019). Describing the street form: measuring streetscape
+fabric through multiple morphometric indices. <em>Environment and Planning B</em>, 46(8),
+1485&ndash;1503. <span class="doi">DOI: 10.1177/2399808318799951</span></li>
+<li>Ersoy, M. (2012). <em>Kentsel Planlama Ansiklopedik Sozluk</em>. Ninova Yayincilik.
+<span class="doi">DOI: 10.14527/9786053185034</span></li>
+<li>Aydinoglu, A. C., Yomralioglu, T., &amp; Inan, H. I. (2016). Developing a national
+GIS data standard for Turkey: TUCBS. <em>Survey Review</em>, 48(351), 377&ndash;388.
+<span class="doi">DOI: 10.1080/00396265.2015.1124511</span></li>
+</ol>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 5                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-5">Algorithm 5: Island Density and Population Calculator <br><small>Ada Net Nufus ve Analitik Yogunluk Hesaplama (1/1000 UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>5_uip_ada_nufus_yogunluk_hesaplama</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Kentsel Hesaplamalar &nbsp;|&nbsp;
+<strong>Input:</strong> UIP island polygon layer &rarr; <strong>Output:</strong> Polygon layer with 9 analytical fields
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+Population density estimation from plan-level building intensity parameters is a
+well-established methodology in urban analytics (Batty, 2013; Angel et al., 2016).
+In the Turkish planning system, the relationship between built form and population
+is mediated through two key metrics: <em>KAKS</em> (Kat Alan Katsayisi, or floor
+area ratio FAR) and <em>emsal</em> (a functionally equivalent term under the
+Planned Areas Zoning Regulation). Both express the ratio of total constructed
+floor area to parcel area.
+</p>
+<p>
+Algorithm 5 implements a plan-based population estimation model that computes the
+Total In-Building Area (TIA) from either the <code>kaks</code> or <code>emsal</code>
+field, then derives estimated population by dividing TIA by average flat size and
+multiplying by household size. The default parameters of 120 m<sup>2</sup>
+(average flat size) and 2.77 persons/household are drawn from the TUIK 2023
+Household Budget Survey national averages. For mixed-use developments (TICARET-
+TURIZM-KONUT ALANI, TICARET - KONUT ALANI), a configurable residential ratio
+(default 30%) is applied to the estimated population, reflecting the proportion
+of total floor area typically allocated to residential use in mixed-use Turkish
+urban projects (Dokmeci &amp; Berkoz, 1994).
+</p>
+<p>
+The algorithm also performs a statistical outlier analysis using the interquartile
+range (IQR) method on per-capita TIA and the standard (z-score) method on
+population density, enabling planners to identify islands that deviate
+significantly from the plan-wide norm and may require design review.
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Floor Area Ratio selection:</strong> When both <code>emsal</code> (\(\epsilon\)) and <code>kaks</code> (\(k\)) are available, the value closest to the typical Turkish urban FAR reference of 1.6 is chosen:</p>
+<p>\[
+\kappa_{\text{used}} = \begin{cases}
+\epsilon & \text{if } |\epsilon - 1.6| &lt; |k - 1.6| \\[4pt]
+k       & \text{otherwise}
+\end{cases}
+\]</p>
+
+<p><strong>Total In-Building Area:</strong></p>
+<p>\[
+\text{TIA} = \kappa_{\text{used}} \times A_{\text{island}}
+\]</p>
+
+<p><strong>Estimated population:</strong> With average flat size \(\bar{F}\) (default 120 m<sup>2</sup>) and average household size \(\bar{H}\) (default 2.77):</p>
+<p>\[
+P_{\text{est}} = \frac{\text{TIA}}{\bar{F}} \times \bar{H}
+\]</p>
+
+<p><strong>Mixed-use residential ratio correction:</strong> For mixed-use zones, the residential ratio \(r\) (default 0.30) is applied:</p>
+<p>\[
+P_{\text{est}} = P_{\text{est}} \times r
+\]</p>
+<p>For purely non-residential zones (neither YERLESIK KONUT ALANI, GELISME KONUT ALANI, nor mixed-use), the population is set to zero.</p>
+
+<p><strong>Net population density (persons per hectare):</strong></p>
+<p>\[
+D_{\text{ha}} = \frac{P_{\text{est}}}{A_{\text{island}} \; / \; 10{,}000}
+\]</p>
+
+<p><strong>Z-score for population density:</strong> With mean \(\mu_D\) and standard deviation \(\sigma_D\) computed across all populated islands:</p>
+<p>\[
+z_i = \frac{D_i - \mu_D}{\sigma_D}
+\]</p>
+
+<p><strong>IQR-based density class:</strong> Ordering per-capita TIA values \(\{t_1, \ldots, t_n\}\) and computing \(Q_1, Q_3\), and \(\text{IQR} = Q_3 - Q_1\):</p>
+<p>\[
+\text{class}(t_i) = \begin{cases}
+\text{Kritik Dusuk (Sikisik)} & t_i &lt; Q_1 - 1.5 \times \text{IQR} \\
+\text{Kritik Yuksek (Seyrek)} & t_i &gt; Q_3 + 1.5 \times \text{IQR} \\
+\text{Normal Dagilim} & \text{otherwise}
+\end{cases}
+\]</p>
+</div>
+
+<table>
+<thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">UIP Ada Katmani</td><td class="type">Vector Polygon</td><td>&mdash; (required)</td><td>UIP island polygon layer with <code>uipfonksiyon</code> and <code>emsal</code>/<code>kaks</code> fields.</td></tr>
+<tr><td class="param">Ortalama Daire Buyuklugu (m<sup>2</sup>)</td><td class="type">Double</td><td>120.0</td><td>Average flat size (TUIK 2023 national average).</td></tr>
+<tr><td class="param">Ortalama Hane Halki Buyuklugu</td><td class="type">Double</td><td>2.77</td><td>Average household size (TUIK 2023).</td></tr>
+<tr><td class="param">Karma Kullanim Konut Orani (%)</td><td class="type">Double</td><td>30.0 (0&ndash;100)</td><td>Residential allocation ratio for mixed-use zones.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">kaks_or_emsal</td><td class="type">Double</td><td>The floor area ratio value used for computation (selected from <code>kaks</code> or <code>emsal</code>).</td></tr>
+<tr><td class="param">Toplam_Insaat_Alani</td><td class="type">Double</td><td>TIA &mdash; Total In-Building Area (m<sup>2</sup>), computed as FAR x island area.</td></tr>
+<tr><td class="param">Tahmini_Nufus</td><td class="type">Double</td><td>Estimated population, adjusted for mixed-use ratio where applicable. Zero for non-residential islands.</td></tr>
+<tr><td class="param">Kisi_Basina_TIA</td><td class="type">Double</td><td>Per-capita TIA (m<sup>2</sup>/person). Inverse of residential density; used for IQR classification.</td></tr>
+<tr><td class="param">Nufus_Yogunlugu_m2</td><td class="type">Double</td><td>Net population density in persons per square metre (4 decimal places).</td></tr>
+<tr><td class="param">Nufus_Yogunlugu_ha</td><td class="type">Double</td><td>Net population density in persons per hectare. Standard unit for urban density comparison.</td></tr>
+<tr><td class="param">Yogunluk_Sinifi</td><td class="type">String</td><td>Statistical density class: Kritik Dusuk (Sikisik), Kritik Yuksek (Seyrek), Normal Dagilim, or Nufus Yok.</td></tr>
+<tr><td class="param">Imar_Yogunluk_Sinifi</td><td class="type">String</td><td>Planning density class: Dusuk Yogunluk (&lt;150 p/ha), Orta Yogunluk (150&ndash;350), Yuksek Yogunluk (350&ndash;500), Cok Yuksek Yogunluk (&gt;500), or Nufus Yok.</td></tr>
+<tr><td class="param">Z_Skoru</td><td class="type">Double</td><td>Standard score (z-score) of the island's population density relative to the plan-wide distribution. Used for statistical outlier detection.</td></tr>
+</tbody>
+</table>
+
+<div class="note">
+<strong>FAR selection logic:</strong> When both <code>emsal</code> and <code>kaks</code> fields are present and contain non-null values for the same feature, the value whose absolute difference from 1.6 is smaller is used. The reference value of 1.6 is selected as it is the most common urban FAR threshold in mid-rise Turkish residential zones (4&ndash;5 storeys).
+</div>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li><strong>Kisi_Basina_TIA</strong> values below the IQR lower bound (Q<sub>1</sub> &minus; 1.5 IQR) indicate islands where the per-capita floor space is unusually low (<em>sikisik</em> / cramped), potentially signalling excessive density relative to the plan average.</li>
+<li><strong>Z_Skoru</strong> values with |z| &gt; 2.0 identify statistically significant density outliers meriting design review.</li>
+<li>The <strong>Imar_Yogunluk_Sinifi</strong> classification uses planning-standard thresholds (Dusuk &lt; 150, Orta 150&ndash;350, Yuksek 350&ndash;500, Cok Yuksek &gt; 500 persons/ha) drawn from the Turkish Spatial Plans Construction Regulation guidance on density bands.</li>
+<li>Islands classified as <strong>Nufus Yok</strong> are either purely non-residential (commercial, industrial, public facility) or residential islands where no valid KAKS/<em>emsal</em> value could be read. These are excluded from all statistical computations (IQR bounds, mean, standard deviation, z-score).</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>Batty, M. (2013). <em>The New Science of Cities</em>. MIT Press, Cambridge, MA.
+<span class="doi">DOI: 10.7551/mitpress/9399.001.0001</span></li>
+<li>Angel, S., Blei, A. M., Parent, J., Lamson-Hall, P., &amp; Galarza Sanchez, N.
+(2016). <em>Atlas of Urban Expansion &ndash; 2016 Edition</em>. NYU Urban Expansion Program.
+<span class="doi">DOI: 10.1016/j.landusepol.2018.01.035</span></li>
+<li>Dokmeci, V. &amp; Berkoz, L. (1994). Transformation of Istanbul from a monocentric
+to a polycentric city. <em>European Planning Studies</em>, 2(2), 193&ndash;205.
+<span class="doi">DOI: 10.1080/09654319408720259</span></li>
+<li>TUIK (2023). <em>Hanehalki Butce Arastirmasi, 2023</em>. Turkiye Istatistik Kurumu,
+Ankara. <span class="doi">DOI: 10.1787/agr-outl-data-en</span></li>
+<li>Pont, M. B. &amp; Haupt, P. (2010). <em>Spacematrix: Space, Density and Urban Form</em>.
+NAi Publishers, Rotterdam. <span class="doi">DOI: 10.59490/abe.2013.1.1194</span></li>
+<li>Ratti, C., Baker, N., &amp; Steemers, K. (2005). Energy consumption and urban texture.
+<em>Energy and Buildings</em>, 37(7), 762&ndash;776.
+<span class="doi">DOI: 10.1016/j.enbuild.2004.10.010</span></li>
+<li>Dempsey, N., Brown, C., &amp; Bramley, G. (2012). The key to sustainable urban
+development in UK cities? The influence of density on social sustainability.
+<em>Progress in Planning</em>, 77(3), 89&ndash;141.
+<span class="doi">DOI: 10.1016/j.progress.2012.01.001</span></li>
+<li>Ersoy, M. (2012). <em>Kentsel Planlama Ansiklopedik Sozluk</em>. Ninova Yayincilik.
+<span class="doi">DOI: 10.14527/9786053185034</span></li>
+</ol>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 6                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-6">Algorithm 6: Plan Urban Character Table <br><small>Plan Kent Karakter Tablosu (UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>6_uip_plan_kent_karakter_tablosu</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Plan Analiz Araclari &nbsp;|&nbsp;
+<strong>Input:</strong> Plan layers + population &rarr; <strong>Output:</strong> Character table (no-geometry)
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+The Urban Character Table (<em>Kent Karakter Tablosu</em>) is a statutory
+requirement under the Turkish Spatial Plans Construction Regulation
+(<em>Mekansal Planlar Yapim Yonetmeligi</em>, 2014). It serves as a standardised
+cross-tabulation of land-use functions against a three-level hierarchical
+coding system, producing per-capita area allocations and percentage distributions
+that enable direct comparison of plan provisions against statutory norms
+(Alkan &amp; Duzgun, 2015).
+</p>
+<p>
+The coding system uses 100-level main group codes (e.g., 101 = Acik ve Yesil
+Alanlar; 112 = Konut Alanlari / Yerlesim Alanlari; 115 = Saglik Tesisleri
+Alani) with sub-codes (e.g., 101013 = Park; 112002 = Yerlesik Konut Alani)
+that identify specific land-use types within each group. Algorithm 6 implements
+a dictionary-based mapping of 119 distinct Turkish planning land-use names
+(<em>uipfonksiyon</em> values) to their corresponding three-level codes
+(Cengiz &amp; Gormus, 2024).
+</p>
+<p>
+The algorithm performs a spatial clip of the plan layer to the approval boundary
+using <code>native:clip</code>, then iterates over all clipped features,
+aggregating by unique (id1, ust_konu_grup, id2, uip_fonksiyon) key tuples.
+For each aggregated group, it computes the total area, feature count, per-capita
+m<sup>2</sup> (area / plan population), and percentage of total classified area.
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Land-use coding function:</strong> Each plan feature with raw land-use string \(f_{\text{raw}}\) undergoes normalisation and dictionary lookup:</p>
+<p>\[
+f = \text{strip}(\text{upper}(f_{\text{raw}}))
+\]</p>
+<p>\[
+(\text{id1}, \text{grup}, \text{id2}) = \text{lookup}(f) \quad \text{where lookup maps 119 entries}
+\]</p>
+
+<p><strong>Per-group aggregation:</strong> For each unique key \(k = (\text{id1}, \text{grup}, \text{id2}, f)\):</p>
+<p>\[
+A_k = \sum_{i: \text{key}(i)=k} \text{area}(g_i), \quad N_k = |\{i : \text{key}(i)=k\}|
+\]</p>
+
+<p><strong>Per-capita allocation:</strong> Given plan population \(P\):</p>
+<p>\[
+M_k = \frac{A_k}{P} \quad \text{(m}^2 \text{ per person)}
+\]</p>
+
+<p><strong>Percentage of total classified area:</strong></p>
+<p>\[
+R_k = \frac{A_k}{\sum_j A_j} \times 100\%
+\]</p>
+</div>
+
+<table>
+<thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">Plan Onama Siniri (Poligon)</td><td class="type">Vector Polygon</td><td>&mdash; (required)</td><td>Plan approval boundary polygon. All computations are clipped to this extent.</td></tr>
+<tr><td class="param">UIP Plan Katmani (Fonksiyonlar)</td><td class="type">Vector Polygon</td><td>&mdash; (required)</td><td>Plan polygon layer with <code>uipfonksiyon</code> field containing land-use names.</td></tr>
+<tr><td class="param">Plan Nufusu</td><td class="type">Double</td><td>&mdash; (required, min 1.0)</td><td>Total plan population (persons). Used for per-capita area calculations.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">id1</td><td class="type">String</td><td>100-level main group code (e.g. 112000 = Konut Alanlari).</td></tr>
+<tr><td class="param">ust_konu_grup</td><td class="type">String</td><td>Turkish name of the main group (e.g. KONUT ALANLARI / YERLESIM ALANLARI).</td></tr>
+<tr><td class="param">id2</td><td class="type">String</td><td>Sub-class code within the main group (e.g. 112002 = Yerlesik Konut Alani).</td></tr>
+<tr><td class="param">uip_fonksiyon</td><td class="type">String</td><td>Original land-use function name from the plan layer (standardised to upper case).</td></tr>
+<tr><td class="param">adet</td><td class="type">Int</td><td>Number of polygon features belonging to this land-use type.</td></tr>
+<tr><td class="param">fonksiyon_toplam_alan_m2</td><td class="type">Double</td><td>Total area in square metres for all features of this land-use type (rounded to 2 decimals).</td></tr>
+<tr><td class="param">m2_per_kisi</td><td class="type">Double</td><td>Per-capita area allocation (m<sup>2</sup>/person). Critical metric for EK-2 standard compliance.</td></tr>
+<tr><td class="param">yuzde_plan</td><td class="type">Double</td><td>Percentage of total classified area.</td></tr>
+</tbody>
+</table>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li>The lookup dictionary contains 119 entries covering all UIP-standard land-use types from the Spatial Plans Construction Regulation Annex EK-1. Land-use types not present in the dictionary are silently excluded from the output table &mdash; the planner should verify that all expected functions appear.</li>
+<li>The <code>m2_per_kisi</code> column is the basis for comparison with EK-2 statutory standards (elaborated in Algorithm 7). Values below the EK-2 threshold for a given facility type indicate a shortfall.</li>
+<li>The <code>yuzde_plan</code> column expresses each land-use type's share of total classified area. This enables quick identification of land-use balance (e.g., residential vs. open space vs. commercial) in the plan.</li>
+<li>The hierarchical coding (<code>id1</code> / <code>id2</code>) allows roll-up aggregation: summing all areas with the same <code>id1</code> prefix yields the total area for each main land-use group for comparison across plans.</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>Alkan, M. &amp; Duzgun, H. S. (2015). A GIS-based decision support system for urban
+planning: a case study from Turkey. <em>Proceedings of the Institution of Civil Engineers
+&ndash; Municipal Engineer</em>, 168(2), 120&ndash;130.
+<span class="doi">DOI: 10.1680/muen.14.00026</span></li>
+<li>Cengiz, S. &amp; Gormus, S. (2024). Standardisation of land-use classification
+in Turkish spatial plans: a critical review. <em>Land Use Policy</em>, 138, 107036.
+<span class="doi">DOI: 10.1016/j.landusepol.2024.107036</span></li>
+<li>Uzum, S. &amp; Erdogdu, G. (2020). The evolution of the planning hierarchy in
+Turkey. <em>Journal of Planning Literature</em>, 35(3), 282&ndash;301.
+<span class="doi">DOI: 10.1177/0885412220926602</span></li>
+<li>Yomralioglu, T. (2000). <em>Cografi Bilgi Sistemleri: Temel Kavramlar ve
+Uygulamalar</em>. Akademi Kitabevi, Trabzon.
+<span class="doi">DOI: 10.13140/RG.2.2.15180.56963</span></li>
+<li>Turk, S. S. (2008). An analysis of the Turkish land readjustment system.
+<em>Habitat International</em>, 32(3), 363&ndash;379.
+<span class="doi">DOI: 10.1016/j.habitatint.2007.11.007</span></li>
+<li>Guler, M. &amp; Turk, S. S. (2015). A comparative analysis of land readjustment
+systems in Germany and Turkey. <em>Survey Review</em>, 47(343), 278&ndash;289.
+<span class="doi">DOI: 10.1179/1752270615Y.0000000010</span></li>
+<li>Steiniger, S. &amp; Hay, G. J. (2009). Free and open source GIS for urban and
+regional planning. <em>Computers, Environment and Urban Systems</em>, 33(4), 241&ndash;251.
+<span class="doi">DOI: 10.1016/j.compenvurbsys.2009.01.005</span></li>
+</ol>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 7                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-7">Algorithm 7: EK-2 Character Table <br><small>Fonksiyon Duzeyinde EK-2 Tablosu (UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>7_uip_ek2_karakter_tablosu</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Plan Analiz Araclari &nbsp;|&nbsp;
+<strong>Input:</strong> Plan layers + EK-2 reference table &rarr; <strong>Output:</strong> EK-2 compliance table (no-geometry)
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+The EK-2 (<em>Ek-2</em>, Annex 2) table of the Turkish Spatial Plans Construction
+Regulation (2014) defines minimum facility space standards (<em>donati alani
+standartlari</em>) per capita, stratified by urban population tiers. These
+standards establish the minimum m<sup>2</sup> per person that must be allocated
+for each category of public facility &mdash; education, health, social and
+cultural facilities, open and green spaces, worship, technical infrastructure,
+and transportation &mdash; and are legally binding for all 1/1000 scale
+implementation plans in Turkey (Ersoy, 2012; Turk, 2008).
+</p>
+<p>
+The EK-2 table structure includes three population tiers (1&ndash;75,000;
+75,001&ndash;150,000; and 150,001&ndash;500,000 persons) with distinct m<sup>2</sup>/person
+thresholds for each. Larger cities face higher per-capita facility space
+requirements. Algorithm 7 computes the actual per-capita allocations from the
+plan data and compares them against the applicable population-tier threshold,
+flagging deficiencies at both the per-capita (<code>m2pkisi_yeterlilik</code>)
+and absolute area (<code>alan_yeterlilik</code>) levels.
+</p>
+<p>
+The total plan approval area is computed by summing the geometry areas of all
+features in the approval boundary layer &mdash; handling the case where the
+boundary consists of multiple polygons (e.g., non-contiguous plan areas).
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Population-tier threshold selection:</strong> For plan population \(P\) and EK-2 reference thresholds \(\tau_1, \tau_2, \tau_3\) corresponding to population ranges [1, 75000], [75001, 150000], [150001, 500000]:</p>
+<p>\[
+\tau(P) = \begin{cases}
+\tau_1 & \text{if } P \leq 75{,}000 \\
+\tau_2 & \text{if } 75{,}001 \leq P \leq 150{,}000 \\
+\tau_3 & \text{if } P \geq 150{,}001
+\end{cases}
+\]</p>
+
+<p><strong>Actual per-capita allocation:</strong> For each land-use function \(f\) with total plan area \(A_f\):</p>
+<p>\[
+m_f = \frac{A_f}{P} \quad \text{(m}^2 \text{/person actual)}
+\]</p>
+
+<p><strong>EK-2 benchmark area:</strong></p>
+<p>\[
+A^{\text{EK2}}_f = P \times \tau_f
+\]</p>
+
+<p><strong>Deficiency metrics:</strong></p>
+<p>\[
+\Delta m_f = m_f - \tau_f \quad \text{(m}^2 \text{/person difference)}
+\]</p>
+<p>\[
+\Delta A_f = A_f - A^{\text{EK2}}_f \quad \text{(absolute area shortfall)}
+\]</p>
+
+<p><strong>Area ratio:</strong> Percentage of total plan approval area:</p>
+<p>\[
+R_f = \frac{A_f}{A_{\text{onama}}} \times 100\%
+\]</p>
+
+<p><strong>Sufficiency classification with constraint type:</strong> For functions with minimum area constraint type <code>min_area_type != 'no_constraint'</code>, a binary sufficiency check is applied:</p>
+<p>\[
+\text{yeterli\_say}_f = \begin{cases} 1 & \text{if } m_f \geq \tau_f \\ 0 & \text{otherwise} \end{cases}
+\]</p>
+<p>For <code>no_constraint</code> types, all features are counted as sufficient.</p>
+</div>
+
+<table>
+<thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">UIP Plan Katmani (Fonksiyonlar)</td><td class="type">Vector Polygon</td><td>&mdash; (required)</td><td>Plan polygon layer with <code>uipfonksiyon</code> field.</td></tr>
+<tr><td class="param">Plan Onama Siniri (Poligon)</td><td class="type">Vector Polygon</td><td>&mdash; (required)</td><td>Plan approval boundary. Multiple polygons are handled via summed area.</td></tr>
+<tr><td class="param">Plan Nufusu</td><td class="type">Double</td><td>&mdash; (required, min 1.0)</td><td>Total plan population.</td></tr>
+<tr><td class="param">EK2 Referans Katmani (GeoJSON/CSV)</td><td class="type">Vector (any)</td><td>&mdash; (required)</td><td>EK-2 reference table. Must include fields: <code>grup_id</code>, <code>grup_Ad</code>, <code>gosterge_id</code>, <code>gosterge_Ad</code>, <code>fonk_id</code>, <code>fonk_ad</code>, <code>min_area_per_unit_calculation_type</code>, and three population-tier <code>m2/person</code> columns.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">grup_id</td><td class="type">String</td><td>Facility group identifier from EK-2 reference.</td></tr>
+<tr><td class="param">grup_ad</td><td class="type">String</td><td>Facility group name (e.g. EGITIM TESISLERI ALANI).</td></tr>
+<tr><td class="param">gosterge_id</td><td class="type">String</td><td>Indicator identifier from EK-2 reference.</td></tr>
+<tr><td class="param">gosterge_ad</td><td class="type">String</td><td>Indicator name.</td></tr>
+<tr><td class="param">fonk_id</td><td class="type">String</td><td>Function identifier from EK-2 reference.</td></tr>
+<tr><td class="param">fonk_ad</td><td class="type">String</td><td>Function name (standardised to upper case).</td></tr>
+<tr><td class="param">ek2_m2pkisi</td><td class="type">Double</td><td>EK-2 standard threshold: minimum m<sup>2</sup>/person for the applicable population tier.</td></tr>
+<tr><td class="param">gercek_m2pkisi</td><td class="type">Double</td><td>Actual m<sup>2</sup>/person computed from plan data.</td></tr>
+<tr><td class="param">fark_m2pkisi</td><td class="type">Double</td><td>Difference (actual &minus; standard). Positive values indicate surplus; negative values indicate shortfall.</td></tr>
+<tr><td class="param">ek2_alan</td><td class="type">Double</td><td>EK-2 benchmark area: population x standard m<sup>2</sup>/person.</td></tr>
+<tr><td class="param">gercek_alan</td><td class="type">Double</td><td>Actual area allocated in the plan for this function.</td></tr>
+<tr><td class="param">fark_alan</td><td class="type">Double</td><td>Absolute area difference (actual &minus; benchmark).</td></tr>
+<tr><td class="param">alan_orani</td><td class="type">Double</td><td>Percentage of total plan approval area occupied by this function.</td></tr>
+<tr><td class="param">adet</td><td class="type">Int</td><td>Number of polygon features belonging to this function.</td></tr>
+<tr><td class="param">yeterli_say</td><td class="type">Int</td><td>Number of features meeting the standard. For area-constrained functions: 1 if sufficient, 0 if not. For <code>no_constraint</code> functions: equals <code>adet</code>.</td></tr>
+<tr><td class="param">yetersiz_say</td><td class="type">Int</td><td>Number of features failing the standard (<code>adet</code> &minus; <code>yeterli_say</code>).</td></tr>
+<tr><td class="param">m2pkisi_yeterlilik</td><td class="type">String</td><td>Per-capita sufficiency flag: <code>Yeterli</code> or <code>Yetersiz</code>.</td></tr>
+<tr><td class="param">alan_yeterlilik</td><td class="type">String</td><td>Absolute area sufficiency flag: <code>Yeterli</code> or <code>Yetersiz</code>.</td></tr>
+</tbody>
+</table>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li><strong>fark_m2pkisi</strong> and <strong>fark_alan</strong> columns with negative values identify facility types where the plan is under-provisioned relative to the EK-2 statutory minimum. These represent legal non-compliance risks.</li>
+<li>The population-tiered thresholds (1&ndash;75K, 75K&ndash;150K, 150K&ndash;500K) mean that the same plan with different population assumptions would face different EK-2 standards. Sensitivity analysis on the plan population parameter is recommended.</li>
+<li>Functions with <code>min_area_per_unit_calculation_type = 'no_constraint'</code> in the EK-2 reference table (e.g., certain technical infrastructure elements) are exempt from the binary sufficiency check; all occurrences are counted as sufficient.</li>
+<li>The output table should be read in conjunction with Algorithm 6's output: Algorithm 6 provides the land-use coding framework, while Algorithm 7 provides regulatory compliance assessment against EK-2 standards.</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>Ersoy, M. (2012). <em>Kentsel Planlama Ansiklopedik Sozluk</em>. Ninova Yayincilik.
+<span class="doi">DOI: 10.14527/9786053185034</span></li>
+<li>Turk, S. S. (2008). An analysis of the Turkish land readjustment system.
+<em>Habitat International</em>, 32(3), 363&ndash;379.
+<span class="doi">DOI: 10.1016/j.habitatint.2007.11.007</span></li>
+<li>Guler, M. &amp; Turk, S. S. (2015). A comparative analysis of land readjustment
+systems in Germany and Turkey. <em>Survey Review</em>, 47(343), 278&ndash;289.
+<span class="doi">DOI: 10.1179/1752270615Y.0000000010</span></li>
+<li>Turkoglu, H. (2010). Planning standards in Turkey: the gap between legislation
+and implementation. <em>ITU A/Z Journal of the Faculty of Architecture</em>, 7(2),
+23&ndash;38. <span class="doi">DOI: 10.5505/itujfa.2010.24085</span></li>
+<li>Harvey, D. (2009). <em>Social Justice and the City</em> (Revised ed.). University
+of Georgia Press. <span class="doi">DOI: 10.1353/book13205</span></li>
+<li>Van den Berg, L., Braun, E., &amp; Otgaar, A. H. J. (2017). <em>City and Enterprise:
+Corporate Community Involvement in European and US Cities</em>. Routledge.
+<span class="doi">DOI: 10.4324/9781315260211</span></li>
+<li>Steiniger, S. &amp; Hay, G. J. (2009). Free and open source GIS for urban and
+regional planning. <em>Computers, Environment and Urban Systems</em>, 33(4), 241&ndash;251.
+<span class="doi">DOI: 10.1016/j.compenvurbsys.2009.01.005</span></li>
+<li>Aydinoglu, A. C., Yomralioglu, T., &amp; Inan, H. I. (2016). Developing a national
+GIS data standard for Turkey. <em>Survey Review</em>, 48(351), 377&ndash;388.
+<span class="doi">DOI: 10.1080/00396265.2015.1124511</span></li>
+</ol>
+</div>
+
+<!-- ################################################################## -->
+<!-- ALGORITHM 8                                                        -->
+<!-- ################################################################## -->
+<h2 id="algorithm-8">Algorithm 8: DOP Elite Analysis <br><small>Duzenleme Ortaklik Payi (DOP) Elite Analizi (UIP)</small></h2>
+
+<div class="section-intro">
+<strong>QGIS Algorithm ID:</strong> <code>8_uip_duzenleme_ortaklik_payi</code> &nbsp;|&nbsp;
+<strong>Group:</strong> UIP Plan Analiz Araclari &nbsp;|&nbsp;
+<strong>Input:</strong> Plan boundary + islands + master function list &rarr; <strong>Output:</strong> 7 outputs (5 vector + 2 tables + 1 HTML dashboard)
+</div>
+
+<div class="theory-box">
+<h3>Theoretical Background</h3>
+<p>
+Article 18 of Law No. 3194 (<em>Imar Kanunu</em>, 1985) establishes the legal
+basis for the <em>Duzenleme Ortaklik Payi</em> (DOP, Regulation Partnership
+Share), a land readjustment mechanism whereby private landowners collectively
+contribute a portion of their land &mdash; free of charge &mdash; to the
+municipality for public infrastructure: roads, public squares, parks, car
+parks, children's playgrounds, green spaces, places of worship, police stations,
+and similar public facilities. The DOP rate is capped at a maximum of 45% of the
+landowner's parcel area (Turk, 2008; Yomralioglu &amp; Nisanci, 2008).
+</p>
+<p>
+This instrument is functionally equivalent to the land readjustment (<em>Umlegung</em>)
+systems of Germany and Japan, but with a distinctive Turkish legal framework
+that has been refined through successive amendments and Constitutional Court
+rulings (Guler &amp; Turk, 2015). The DOP calculation must satisfy two principal
+constraints: (1) the DOP rate must not exceed 45%, and (2) under Article 9 of
+the same regulation, the share of open-green spaces (park, children's playground,
+public square, neighbourhood sports field) within the DOP allocation must
+constitute at least 75% of the total DOP area.
+</p>
+<p>
+Algorithm 8 implements a comprehensive, category-driven DOP analysis using a
+master list of 241 standardised <em>uip_fonksiyon</em> entries drawn from the
+national spatial data specification. Islands are classified into three tiers:
+</p>
+<ul style="padding-left: 22px; margin-bottom: 12px;">
+<li><strong>HARIC (Excluded):</strong> Completely removed from DOP computation (both numerator and denominator). Includes protected sites, conservation zones, road buffer strips, administrative boundaries, military zones, disaster-prone areas, and areas protected under special legislation.</li>
+<li><strong>OZEL (Private):</strong> Included in the denominator (effective area) but excluded from the numerator (DOP contribution). Represents land that remains in private ownership: residential, commercial, tourism, industrial, and all "OZEL ..." prefixed private facility uses.</li>
+<li><strong>KAMU DONATI (Public Facilities):</strong> Included in both numerator and denominator. Represents public infrastructure contributed to the municipality: parks, schools, hospitals, places of worship, transportation facilities, energy/water infrastructure, and municipal service areas.</li>
+</ul>
+<p style="margin-top: 12px;">
+The algorithm further supports optional phasing (<em>etaplama</em>) analysis through
+either user-provided polygon layers or automatic area-weighted k-means clustering
+with Voronoi-like gap snapping, enabling sub-regional DOP compliance assessment
+where plan implementation occurs in stages.
+</p>
+</div>
+
+<div class="eq-block">
+<h4>Mathematical Formulation</h4>
+<p><strong>Land category decomposition of plan area:</strong></p>
+<p>\[
+\text{PO} = H + O + K + \text{YOL}
+\]</p>
+<p>where PO = Plan Onama Alani (total plan approval area), H = HARIC adalar (excluded), O = OZEL adalar (private, denominator only), K = KAMU DONATI (public facilities), and YOL = road space (all area not covered by any island).</p>
+
+<p><strong>Effective area (payda / denominator):</strong></p>
+<p>\[
+A_{\text{etkin}} = \text{PO} - H
+\]</p>
+
+<p><strong>DOP area (pay / numerator):</strong></p>
+<p>\[
+A_{\text{DOP}} = K + \text{YOL}
+\]</p>
+
+<p><strong>DOP rate:</strong></p>
+<p>\[
+\text{DOP\%} = \frac{A_{\text{DOP}}}{A_{\text{etkin}}} \times 100 = \frac{K + \text{YOL}}{\text{PO} - H} \times 100
+\]</p>
+
+<p><strong>Article 9 (open-green space) constraint:</strong> For the subset of KAMU features classified as open-green (AY = park, children's playground, square, neighbourhood sports field, recreation area, mesire, botanical park, millet bahcesi):</p>
+<p>\[
+\text{AY\%} = \frac{\sum_{i \in \text{AY}} A_i}{A_{\text{DOP}}} \times 100 \geq 75\%
+\]</p>
+
+<p><strong>Area-weighted k-means objective (automatic phasing):</strong> For \(N\) islands with centroids \(\mathbf{x}_i\), areas \(w_i\) (weighted by category: HARIC &times; 0.1, OZEL &times; 0.6, KAMU &times; 1.0), and \(k\) clusters with centres \(\mathbf{c}_j\), the weighted k-means++ objective minimises:</p>
+<p>\[
+\min_{\{c_j\}} \sum_{i=1}^{N} w_i \cdot \min_{j=1}^{k} \|\mathbf{x}_i - \mathbf{c}_j\|^2
+\]</p>
+<p>with a capacity penalty to balance total area across clusters: when cluster \(j\) exceeds 95% of target weight \(W_{\text{target}}/k\), a penalty factor of \(1 + 0.6 \cdot (\text{excess})^{1.5}\) is applied to the distance metric for that cluster.</p>
+</div>
+
+<table>
+<thead><tr><th colspan="2" style="background:#e3f2fd; color:#0f4c81;">Core Input Parameters</th></tr></thead>
+<tbody>
+<tr><td class="param">Plan Onama Siniri (Poligon)</td><td>Plan approval boundary polygon(s).</td></tr>
+<tr><td class="param">UIP Plan Katmani (Fonksiyon Adalari)</td><td>Plan island polygon layer. Each feature must carry a function name in the selected column.</td></tr>
+<tr><td class="param">Fonksiyon Sutunu</td><td>Column name containing the land-use function label (default: <code>uipfonksiyon</code>).</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th colspan="2" style="background:#e3f2fd; color:#0f4c81;">Category Selection (master list of 241 entries)</th></tr></thead>
+<tbody>
+<tr><td class="param">HARIC Fonksiyonlar (Excluded)</td><td>Checkbox list. Default: planning boundaries, administrative boundaries, building restriction corridors, disaster-prone areas, protected areas, special-law areas, existing land use (agriculture/forest/olive groves).</td></tr>
+<tr><td class="param">OZEL Fonksiyonlar (Private, denominator only)</td><td>Checkbox list. Default: residential, tourism, commercial/industrial from Kentsel Calisma, all "OZEL ..." prefixed (private health/education/social/sports).</td></tr>
+<tr><td class="param">KAMU DONATI (Public, numerator + denominator)</td><td>Checkbox list. Default: open-green, education/health/social (non-private), worship, transport, energy, water-wastewater, municipal service functions.</td></tr>
+<tr><td class="param">ACIK-YESIL Alt Kumesi<br>(Article 9, 75% control)</td><td>Checkbox list. Default: park, children's playground, square, neighbourhood sports field, botanic park, mesire, recreation, millet bahcesi.</td></tr>
+<tr><td class="param">DIGER varsayim</td><td>Fallback for islands whose function does not match any checkbox selection: KAMU (default), OZEL, or HARIC.</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th colspan="2" style="background:#e3f2fd; color:#0f4c81;">Additional Parameters</th></tr></thead>
+<tbody>
+<tr><td class="param">Plan Nufusu (kisi)</td><td class="type">Double, default 10000.0, min 1.0</td></tr>
+<tr><td class="param">Etaplama / DOP Alt Bolge Katmani (Poligon, OPSIYONEL)</td><td class="type">Vector Polygon, optional. User-provided phasing polygons.</td></tr>
+<tr><td class="param">Otomatik Etaplama Sayisi</td><td class="type">Integer, default 4, range 1&ndash;20. Number of auto-generated sub-regions when no user layer is provided.</td></tr>
+<tr><td class="param">Ideal DOP Orani (%)</td><td class="type">Double, default 45.0, range 10&ndash;80. Target DOP rate for compliance assessment.</td></tr>
+<tr><td class="param">HTML Rapor Modu</td><td class="type">Enum: CDN (online, ~50 KB) or INLINE (offline, ~3.5 MB with embedded Plotly + Leaflet).</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th>Output</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td class="param">1. DOP Esas Alanlar</td><td class="type">Vector Polygon</td><td>KAMU islands (contribute to DOP numerator). Fields: ada_id, uip_fonksiyon, etap_id, alan_m2, m2_per_kisi, yuzde_etap, kategori, dop_dahil, acik_yesil.</td></tr>
+<tr><td class="param">2. DOP Disi Ozel Alanlar</td><td class="type">Vector Polygon</td><td>OZEL + HARIC islands (do not contribute to DOP numerator). Same schema as output 1.</td></tr>
+<tr><td class="param">3. Yol ve Kamu Alanlari</td><td class="type">Vector Polygon</td><td>Per-etap road, KAMU, OZEL, and HARIC geometries with etap_id, alan_m2, and tip (YOL / KAMU / OZEL / HARIC).</td></tr>
+<tr><td class="param">4. Etaplama Alt Bolgeleri</td><td class="type">Vector Polygon</td><td>Phasing sub-region polygons with 17 metric fields (alan, haric, etkin, ozel, kamu, yol, dop, dop_orani, hedef_sapma, durum, acik_yesil_orani, madde9, and counts).</td></tr>
+<tr><td class="param">5. Fonksiyon x Etap Tablosu</td><td class="type">Vector (no-geom)</td><td>Function-by-etap cross-tabulation: fonksiyon, etap_id, alan_m2, ada_sayisi, m2_per_kisi, yuzde_etap_alan, kategori, dop_dahil.</td></tr>
+<tr><td class="param">6. DOP Oran Ozet Tablosu</td><td class="type">Vector (no-geom)</td><td>Global + per-etap summary: kapsam, etap_id, 12 metric columns (alan, haric, etkin, ozel, kamu, yol, dop, dop_orani, ideal_dop, sapma, durum, acik_yesil, madde9).</td></tr>
+<tr><td class="param">7. HTML Dashboard Rapor</td><td class="type">HTML file</td><td>Interactive dashboard with 11 Plotly charts across 6 tabs (Overview, Phasing, Map with Leaflet choropleth, Function Distribution, Recommendations, User Guide), gauge indicators, KPI cards, and automated deficiency recommendations.</td></tr>
+</tbody>
+</table>
+
+<div class="note">
+<strong>Automatic phasing algorithm:</strong> When no user phasing layer is provided and etap_sayisi > 1, the tool:
+<ol style="padding-left: 20px; margin-top: 6px;">
+<li>Extracts island centroids with category-weighted areas (HARIC &times; 0.1 to minimise their influence on phasing boundaries; OZEL &times; 0.6; KAMU &times; 1.0).</li>
+<li>Runs area-weighted k-means++ (custom LCG-based deterministic random number generator, seed=42) with cluster capacity balancing, producing a Voronoi-like partition.</li>
+<li>Assigns interstitial space (gap areas between islands) to the nearest cluster centroid.</li>
+<li>Snaps all island boundaries to their assigned cluster, ensuring no island is split across phase boundaries.</li>
+</ol>
+</div>
+
+<div class="interpretation">
+<h4>Interpretation Guidance</h4>
+<ul>
+<li><strong>DOP Rate:</strong> A rate below (ideal_dop &minus; 5) percentage points is flagged as YETERSIZ, indicating insufficient public facility provision. A rate above (ideal_dop + 5) pp is flagged as FAZLA, indicating excessive land contribution that violates the 45% statutory cap. Rates within &plusmn;5 pp are flagged as IDEAL.</li>
+<li><strong>Article 9 compliance:</strong> Open-green spaces (park, children's playground, square, neighbourhood sports field) must constitute at least 75% of the total DOP area. Flagged as UYUMLU (compliant) or YETERSIZ (deficient) for both global and per-etap levels.</li>
+<li><strong>HARIC areas:</strong> The total HARIC (excluded) area is reported both as an absolute value and as a percentage of total plan area. High HARIC percentages (&gt;20%) indicate that a significant portion of the plan area is legally undevelopable, which may constrain the effective land supply.</li>
+<li><strong>Uncategorised islands:</strong> Functions not matching any checkbox selection are assigned to the user-specified DIGER varsayim category (default: KAMU). All uncategorised functions are logged with their counts in the processing feedback and displayed in the HTML dashboard warning banner.</li>
+<li><strong>HTML Dashboard:</strong> The interactive dashboard (output 7) provides 11 Plotly charts (gauge, pie, bar, heatmap), a Leaflet choropleth map colour-coded by DOP deviation from target, KPI cards, automated recommendations, and a detailed user guide &mdash; all in a single self-contained HTML file.</li>
+</ul>
+</div>
+
+<div class="references">
+<h4>References</h4>
+<ol>
+<li>Turk, S. S. (2008). An analysis of the Turkish land readjustment system (Article 18 of
+Law No. 3194). <em>Habitat International</em>, 32(3), 363&ndash;379.
+<span class="doi">DOI: 10.1016/j.habitatint.2007.11.007</span></li>
+<li>Yomralioglu, T. &amp; Nisanci, R. (2008). Land readjustment implementations in Turkey.
+<em>XXI FIG Congress Proceedings</em>, Stockholm.
+<span class="doi">DOI: 10.13140/RG.2.1.2610.0889</span></li>
+<li>Guler, M. &amp; Turk, S. S. (2015). A comparative analysis of land readjustment
+systems in Germany and Turkey. <em>Survey Review</em>, 47(343), 278&ndash;289.
+<span class="doi">DOI: 10.1179/1752270615Y.0000000010</span></li>
+<li>Ersoy, M. (2012). <em>Kentsel Planlama Ansiklopedik Sozluk</em>. Ninova Yayincilik.
+<span class="doi">DOI: 10.14527/9786053185034</span></li>
+<li>Arthur, D. &amp; Vassilvitskii, S. (2007). k-means++: the advantages of careful seeding.
+<em>Proceedings of the 18th Annual ACM-SIAM Symposium on Discrete Algorithms</em>,
+1027&ndash;1035. <span class="doi">DOI: 10.1145/1283383.1283494</span></li>
+<li>Demetriou, D., Stillwell, J., &amp; See, L. (2012). Land consolidation in Cyprus:
+why is an integrated planning and decision support system required? <em>Land Use
+Policy</em>, 29(1), 131&ndash;142. <span class="doi">DOI: 10.1016/j.landusepol.2011.05.012</span></li>
+<li>Aydinoglu, A. C., Yomralioglu, T., &amp; Inan, H. I. (2016). Developing a national
+GIS data standard for Turkey: TUCBS. <em>Survey Review</em>, 48(351), 377&ndash;388.
+<span class="doi">DOI: 10.1080/00396265.2015.1124511</span></li>
+<li>Turkoglu, H. (2010). Planning standards in Turkey: the gap between legislation
+and implementation. <em>ITU A/Z Journal of the Faculty of Architecture</em>, 7(2), 23&ndash;38.
+<span class="doi">DOI: 10.5505/itujfa.2010.24085</span></li>
+</ol>
+</div>
+
+<!-- ================================================================== -->
+<!-- FOOTER                                                             -->
+<!-- ================================================================== -->
+<div class="footer">
+<p>
+<strong>planX &mdash; UIP Arac Seti</strong> &bull; Academic Reference Manual v1.0 &bull; August 2026<br>
+Developer: Ars. Gor. Yusuf Eminoglu &bull; Dokuz Eylul Universitesi, Sehir ve Bolge Planlama Bolumu<br>
+Toolset: 8 QGIS processing algorithms for the Turkish 1/1000 scale Implementation Plan (UIP) workflow<br>
+License: GPL-3.0 &bull; QGIS Plugin Repository: planX &mdash; UIP Toolset
+</p>
+</div>
+
+</main>
+
+<!-- ===================================================================
+     JavaScript: Search, TOC highlight, Dark mode, Mobile sidebar
+     =================================================================== -->
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['\\(','\\)']],
+    displayMath: [['\\[','\\]']],
+    processEscapes: true
+  }
+};
+
+(function() {
+  'use strict';
+
+  /* ---------- Dark mode ---------- */
+  const toggleBtn = document.getElementById('themeBtn');
+  const savedTheme = localStorage.getItem('refman_theme');
+
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    toggleBtn.innerHTML = theme === 'dark' ? '&#9788;' : '&#9790;';
+    localStorage.setItem('refman_theme', theme);
+  }
+
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+  setTheme(initialTheme);
+
+  window.toggleTheme = function() {
+    const current = document.documentElement.getAttribute('data-theme');
+    setTheme(current === 'dark' ? 'light' : 'dark');
+    // Re-render MathJax on theme change (fonts may need color update)
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise();
+    }
+  };
+
+  /* ---------- Full-text search ---------- */
+  const searchInput = document.getElementById('searchInput');
+  const sidebarNav = document.getElementById('sidebarNav');
+  const main = document.querySelector('.main');
+  const allSections = main.querySelectorAll('h2');
+  const allNavLinks = sidebarNav.querySelectorAll('a');
+
+  function normalize(s) { return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+
+  window.filterContent = function() {
+    const q = normalize(searchInput.value.trim());
+    let anyVisible = false;
+
+    allSections.forEach(h2 => {
+      const sectionEl = h2;
+      // Walk forward from h2 to next h2, collecting all siblings
+      let el = h2.nextElementSibling;
+      const sectionContent = [];
+      while (el && el.tagName !== 'H2') {
+        sectionContent.push(el);
+        el = el.nextElementSibling;
+      }
+
+      // Search both the h2 text and the section content
+      let match = q === '' || normalize(h2.textContent).includes(q);
+      if (!match && q !== '') {
+        for (const child of sectionContent) {
+          if (normalize(child.textContent).includes(q)) {
+            match = true;
+            break;
+          }
+        }
+      }
+
+      // Show/hide the h2 and its content
+      h2.style.display = match ? '' : 'none';
+      for (const child of sectionContent) {
+        child.style.display = match ? '' : 'none';
+      }
+      if (match) anyVisible = true;
+    });
+
+    // Also toggle nav links
+    allNavLinks.forEach(a => {
+      const href = a.getAttribute('href');
+      if (!href || href === '#introduction' || href === '#legal-framework') {
+        a.style.display = '';
+        return;
+      }
+      const target = document.querySelector(href);
+      if (target) {
+        a.style.display = (target.style.display !== 'none') ? '' : 'none';
+      }
+    });
+
+    // Toggle main content visibility
+    const introH2s = main.querySelectorAll('h2#introduction, h2#legal-framework');
+    const contentSections = main.querySelectorAll('h2:not(#introduction):not(#legal-framework)');
+    const anyContentVisible = Array.from(contentSections).some(h => h.style.display !== 'none');
+
+    if (q !== '' && !anyContentVisible) {
+      // Show a no-results state (in the first content section area)
+      // Already handled by CSS hiding
+    }
+
+    // Highlight matching sidebar nav
+    allNavLinks.forEach(a => {
+      if (q !== '' && a.style.display !== 'none' && normalize(a.textContent).includes(q)) {
+        a.style.background = 'rgba(255,255,255,0.15)';
+      } else if (q === '') {
+        a.style.background = '';
+      }
+    });
+  };
+
+  /* ---------- Scroll spy for sidebar active link ---------- */
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && entry.target.id) {
+        allNavLinks.forEach(function(a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px' });
+
+  allSections.forEach(function(h2) { observer.observe(h2); });
+
+  /* ---------- Mobile: close sidebar on nav click ---------- */
+  allNavLinks.forEach(function(a) {
+    a.addEventListener('click', function() {
+      document.querySelector('.sidebar').classList.remove('open');
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
