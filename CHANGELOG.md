@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.8] - 2026-08-07
+
+- Add comprehensive academic reference manual: 8 algorithms, 42 equations
+
 ## [1.2.7] - 2026-07-14
 
 - Calculate density in hectares, add imar density classes, and clean all security scan warnings without config overrides
