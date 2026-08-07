@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.10] - 2026-08-07
+
+- Added online user manual link (https://yusufeminoglu.github.io/PlanX-UIP/) and GitHub repository star call-to-action.
+
 ## [1.2.9] - 2026-08-07
 
 - Add floating Save as PDF button to reference manual
