@@ -16,6 +16,11 @@
 
 ---
 
+## 📖 Documentation
+
+**[Comprehensive Academic Reference Manual](https://yusufeminoglu.github.io/PlanX-UIP/)** — complete documentation of every feature, parameter, and workflow. Hosted on GitHub Pages.
+
+
 ## Why PlanX UIP Toolset?
 
 Producing a 1/1000-scale Uygulama İmar Planı involves a chain of repetitive geometry and table work: road platforms, junction cleanups, facade segmentation, density tables. This toolset automates the whole implementation pipeline as sequential Processing algorithms, built with feedback from educational workflows at Dokuz Eylül University, Department of City and Regional Planning.
