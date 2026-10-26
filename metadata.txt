@@ -11,6 +11,7 @@ tracker=https://gitlab.com/geophilo1/planx_uip_arac_seti/-/issues
 repository=https://gitlab.com/geophilo1/planx_uip_arac_seti
 category=Processing
 homepage=https://geophilo.com/planx_uip_arac_seti/
+license=GPL-3.0-or-later
 hasProcessingProvider=yes
 tags=planx,urban planning,master plan,uip,zoning,processing
 experimental=False
