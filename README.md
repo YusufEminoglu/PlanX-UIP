@@ -23,7 +23,7 @@
 
 ## Why PlanX UIP Toolset?
 
-Producing a 1/1000-scale Uygulama İmar Planı involves a chain of repetitive geometry and table work: road platforms, junction cleanups, facade segmentation, density tables. This toolset automates the whole implementation pipeline as sequential Processing algorithms, built with feedback from educational workflows at Dokuz Eylül University, Department of City and Regional Planning.
+Producing a 1/1000-scale Uygulama İmar Planı involves a chain of repetitive geometry and table work: road platforms, junction cleanups, facade segmentation, density tables. This toolset automates the whole implementation pipeline as sequential Processing algorithms, built with feedback from educational workflows.
 
 ## ✨ Features
 
@@ -77,4 +77,4 @@ This plugin is one of 15 open-source QGIS plugins for urban planning by the same
 
 ## 📜 License & author
 
-GPL-3.0-or-later © [Yusuf Eminoğlu](https://github.com/YusufEminoglu) — Dokuz Eylül University, Department of City and Regional Planning. Bug reports and feature requests welcome in [Issues](https://gitlab.com/geophilo1/planx_uip_arac_seti/-/issues).
+GPL-3.0-or-later © [Yusuf Eminoğlu](https://github.com/YusufEminoglu) — bug reports and feature requests welcome in [Issues](https://gitlab.com/geophilo1/planx_uip_arac_seti/-/issues).

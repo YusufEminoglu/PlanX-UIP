@@ -1968,7 +1968,7 @@ DOP Alan   (pay)   = K + YOL
     </div>
   </div>
 
-  <div class="footer">PlanX UİP Toolset · Geliştirici: Arş. Gör. Yusuf Eminoğlu · Dokuz Eylül Üniversitesi Şehir ve Bölge Planlama Bölümü</div>
+  <div class="footer">PlanX UİP Toolset · Geliştirici: Geophilo</div>
 </div>
 
 <script>

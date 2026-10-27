@@ -46,7 +46,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) · versioning: 
 
 ## [1.0.1] - 2026
 
-- Cleaned Unicode and Plugin Hub metadata, added DEU educational context, marked the plugin stable, and refreshed the release package.
+- Cleaned Unicode and Plugin Hub metadata, added educational context, marked the plugin stable, and refreshed the release package.
 
 ## [1.0.0]
 
