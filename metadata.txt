@@ -2,18 +2,21 @@
 name=UIP Zoning Plan Toolset
 qgisMinimumVersion=3.0
 qgisMaximumVersion=4.99
-description=PlanX Spatial Planning Plugins - A toolset automating the Uygulama İmar Planı (UIP - Master Plan) implementation processes.
+description=Turkish-language Processing tools for 1/1000 implementation zoning plans (UİP) in Turkey: road platforms, junction cleanup, frontage segmentation, density, Ek-2 tables and DOP analysis.
 version=1.2.11
 author=Geophilo
 email=yusuf.eminoglu@deu.edu.tr
-about=Automated planning tools prepared with the vision of urban resilience, advanced spatial analysis, and optimization-based planning. Generates rapid UIP base layers and layouts. Online User Manual & Documentation: https://geophilo.com/planx_uip_arac_seti/ | If you find this plugin helpful, please consider starring the repository on GitLab (https://gitlab.com/geophilo1/planx_uip_arac_seti)!
+about=UIP Zoning Plan Toolset, 1/1000 ölçekli Uygulama İmar Planı üretimindeki tekrar eden geometri ve tablo işlerini sekiz sıralı Processing aracına dönüştürür.
+    1. Yol aksından yol platformu üretir. 2. Kavşakları temizler ve ayırır. 3. Yol alanlarını poligonlaştırır ve adalarla eşler. 4. Yol cephelerini katsayıyla segmentlere böler. 5. Ada bazında net nüfusu ve analitik yoğunluğu hesaplar. 6. Plan Kent Karakter Tablosunu hazırlar. 7. Fonksiyon düzeyinde EK-2 tablosunu üretir. 8. 3194 sayılı İmar Kanunu 18. madde kapsamında Düzenleme Ortaklık Payı (DOP) analizini yapar ve raporlar.
+    Her aracın çıktısı bir sonrakinin girdisidir; araçlar Processing Toolbox'tan tek tek ya da model tasarımcısında zincir halinde çalışır. Türkiye mevzuatına göre hazırlanmıştır, arayüz Türkçedir.
+    Kılavuz: https://geophilo.com/planx_uip_arac_seti/manual.html
 tracker=https://gitlab.com/geophilo1/planx_uip_arac_seti/-/issues
 repository=https://gitlab.com/geophilo1/planx_uip_arac_seti
 category=Processing
 homepage=https://geophilo.com/planx_uip_arac_seti/
 license=GPL-3.0-or-later
 hasProcessingProvider=yes
-tags=planx,urban planning,master plan,uip,zoning,processing
+tags=planx,urban planning,uip,zoning,processing,implementation plan,zoning plan,road platform,dop,land readjustment,turkey,turkish,geophilo
 experimental=False
 icon=icon.svg
 deprecated=False

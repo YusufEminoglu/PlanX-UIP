@@ -1,7 +1,7 @@
 # File: 8_uip_duzenleme_ortaklik_payi.py
 # -*- coding: utf-8 -*-
 """
-PlanX UIP - Duzenleme Ortaklik Payi (DOP) Elite Hesaplama Araci
+PlanX UIP - Duzenleme Ortaklik Payi (DOP) Hesaplama Araci
 =================================================================
 
 3194 sayili Imar Kanunu 18. madde kapsaminda DOP analizi:
@@ -1441,7 +1441,7 @@ class DuzenlemeOrtaklikPayiUIP(QgsProcessingAlgorithm):
         return '8_uip_duzenleme_ortaklik_payi'
 
     def displayName(self):
-        return '8. Düzenleme Ortaklık Payı (DOP) Elite Analizi (UİP)'
+        return '8. Düzenleme Ortaklık Payı (DOP) Analizi (UİP)'
 
     def group(self):
         return 'UİP Plan Analiz Araçları'
@@ -1454,7 +1454,7 @@ class DuzenlemeOrtaklikPayiUIP(QgsProcessingAlgorithm):
 
     def shortHelpString(self):
         return (
-            "<h3>Düzenleme Ortaklık Payı (DOP) Elite Analiz Aracı</h3>"
+            "<h3>Düzenleme Ortaklık Payı (DOP) Analiz Aracı</h3>"
             "<p>3194 sayılı İmar Kanunu 18. madde kapsamında DOP analizini; "
             "<b>master uip_fonksiyon listesinden tiklenebilir kategori seçimi</b>, "
             "<b>etaplama (alt bölge) bazlı</b> analiz, ve "
@@ -1833,7 +1833,7 @@ pre{background:#f6f8fa;padding:12px 14px;border-radius:6px;font-family:Consolas,
 </head>
 <body>
 <div class="header">
-  <h1>🏛 PlanX UİP — Düzenleme Ortaklık Payı (DOP) Elite Analiz Dashboard</h1>
+  <h1>🏛 PlanX UİP — Düzenleme Ortaklık Payı (DOP) Analiz Dashboard</h1>
   <div class="subtitle">3194 sayılı İmar Kanunu 18. Madde · Etaplama bazlı detay analiz · <span id="rapor_zaman"></span> · Etaplama: <span id="etap_kaynak" class="badge blue"></span></div>
 </div>
 <div class="container">
@@ -1932,7 +1932,7 @@ DOP Alan   (pay)   = K + YOL
 
   <div class="tab-content" data-tab="kilavuz">
     <div class="card">
-      <h3>📖 Kullanım Kılavuzu — DOP Elite Aracı</h3>
+      <h3>📖 Kullanım Kılavuzu — DOP Aracı</h3>
       <div class="kilavuz">
         <h4 style="color:#6a1b9a;margin-bottom:6px;">1. Veri Hazırlığı</h4>
         <p>Plan onama sınırı poligonu ve fonksiyon adalarını içeren UİP plan katmanı projeye yüklenmiş olmalıdır. Plan katmanında her adanın fonksiyon adını taşıyan bir sütun bulunmalıdır (uipfonksiyon, fonksiyon vb.).</p>
