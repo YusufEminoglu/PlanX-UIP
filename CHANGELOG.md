@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.12] - 2026-10-27
+
+- Hub listing text rewritten; author Geophilo; university affiliation removed; documentation links use the standard geophilo.com pages (manual.html, guide/); manual HTML no longer ships in the plugin package.
+
 ## [1.2.11] - 2026-09-06
 
 - Migrate repository and documentation URLs to GitLab and Cloudflare Pages.
